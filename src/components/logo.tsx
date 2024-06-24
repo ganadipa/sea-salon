@@ -1,3 +1,4 @@
+import { MoonIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import React from "react";
 
@@ -7,11 +8,8 @@ export default function Logo() {
       className="flex items-center gap-4 cursor-pointer my-auto"
       href={"/app"}
     >
-      <div
-        className="w-8 aspect-square bg-green-500 rounded-full"
-        content=""
-      ></div>
-      <h1 className="font-bold  text-white/90">SEA SALON</h1>
+      <MoonIcon color="white" />
+      <h1 className="font-bold  text-white/90">SEA Salon</h1>
     </Link>
   );
 }

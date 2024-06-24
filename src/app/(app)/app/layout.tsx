@@ -3,5 +3,10 @@ import NavBar from "@/components/navbar";
 import React from "react";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-  return <main className="">{children}</main>;
+  return (
+    <main className="bg-white">
+      <Header />
+      {children}
+    </main>
+  );
 }

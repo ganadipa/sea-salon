@@ -1,6 +1,6 @@
 "use server";
 
-import { formSchema } from "@/lib/schemas";
+import { reviewFormSchema } from "@/lib/schemas";
 import { db } from "@/drizzle";
 import { ReviewsTable } from "@/drizzle/schema";
 import { TMutationnResponse, TQueryResponse } from "./actions";
@@ -12,7 +12,7 @@ import { drizzle } from "drizzle-orm/neon-http";
 import "dotenv/config";
 
 export async function addReview(review: unknown): Promise<TMutationnResponse> {
-  const validatedReview = formSchema.safeParse(review);
+  const validatedReview = reviewFormSchema.safeParse(review);
   console.log(review);
   if (!validatedReview.success) {
     return {
@@ -86,12 +86,15 @@ export async function getReviews(): Promise<
 
   try {
     const reviews = await db.select().from(ReviewsTable);
-    ret = reviews;
+    const reviewsWithoutId = reviews.map(({ id, ...rest }) => ({
+      ...rest,
+      createdAt: new Date(rest.createdAt),
+    }));
+    ret = reviewsWithoutId;
   } catch (error) {
     ret = undefined;
   }
-  console.log("getReviews", ret);
-  console.log("revalidating path");
+
   revalidatePath("/app");
 
   return ret;

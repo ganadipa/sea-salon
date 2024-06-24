@@ -39,9 +39,7 @@ export default function Services() {
     <section className="min-h-screen flex flex-col items-center pb-24">
       {/* title */}
       <div className="my-12">
-        <span className="text-5xl text-accent-green font-bold">
-          Our Services
-        </span>
+        <span className="text-5xl font-bold">At our salon.</span>
       </div>
 
       {/* Button to show different services */}
@@ -77,9 +75,9 @@ function Service({ service }: { service: TService }) {
           alt={service.name}
           width={300}
           height={300}
-          className="w-[300px] h-[300px]"
+          className="w-[300px] h-[300px] rounded-xl border border-yellow-400"
         />
-        <article className="max-w-[400px] max-h-[300px] text-justify">
+        <article className="max-w-[400px] max-h-[300px] text-justify opacity-60">
           {service.description}
         </article>
       </div>

@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "./ui/textarea";
-import { formSchema } from "@/lib/schemas";
+import { reviewFormSchema } from "@/lib/schemas";
 import { actions } from "@/actions/actions";
 import toast from "react-hot-toast";
 
@@ -26,7 +26,7 @@ export function ReviewForm({
   onFormSubmission: () => void;
 }) {
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(reviewFormSchema),
     mode: "onChange",
     defaultValues: {
       name: "",
@@ -64,7 +64,7 @@ export function ReviewForm({
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Abigail" {...field} />
+                <Input placeholder="Abigail" {...field} spellCheck={false} />
               </FormControl>
 
               <FormMessage />
@@ -81,6 +81,7 @@ export function ReviewForm({
                 <Textarea
                   placeholder="The pedicure service was excellent, and my feet feel incredibly soft."
                   {...field}
+                  spellCheck={false}
                 />
               </FormControl>
               <FormDescription>Your description review.</FormDescription>
@@ -95,7 +96,7 @@ export function ReviewForm({
             <FormItem>
               <FormLabel>Rating</FormLabel>
               <FormControl>
-                <Input placeholder="5" {...field} />
+                <Input placeholder="5" {...field} spellCheck={false} />
               </FormControl>
               <FormDescription>Your rating, out of 5 stars.</FormDescription>
               <FormMessage />

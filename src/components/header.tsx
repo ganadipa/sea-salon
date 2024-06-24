@@ -11,13 +11,17 @@ const routes = [
     label: "Home",
     path: "/app",
   },
+  {
+    label: "Reservations",
+    path: "/app/reservations",
+  },
 ];
 
 export default function Header() {
   const activePathname = usePathname();
 
   return (
-    <header className="flex justify-between items-center border-b w-full border-white/10 py-2 max-w-[780px] mx-auto bg-zinc-100/20 px-4 rounded-b">
+    <header className="flex justify-between items-center border-b w-full border-white/10 py-2 max-w-[780px] mx-auto bg-zinc-800/20 px-4 -translate-x-1/2 rounded-b fixed top-0 left-1/2">
       <Logo />
 
       <nav>
@@ -27,7 +31,7 @@ export default function Header() {
               <Link
                 href={route.path}
                 className={cn(
-                  "text-white/70 rounded-sm px-2 py-1 hover:text-white focus:text-white transition",
+                  "text-white/70 rounded-sm px-2 py-1 hover:text-white focus:text-white transition font-semibold",
                   {
                     "bg-black/10 text-white": route.path === activePathname,
                   }

@@ -1,6 +1,7 @@
 import { z } from "zod";
+import { services } from "./const";
 
-export const formSchema = z.object({
+export const reviewFormSchema = z.object({
   name: z
     .string()
     .min(2, {
@@ -25,4 +26,11 @@ export const formSchema = z.object({
     .refine((val) => val >= 1 && val <= 5, {
       message: "Rating must be between 1 and 5.",
     }),
+});
+
+export const reservationFormSchema = z.object({
+  name: z.string().min(2).max(20),
+  phonenumber: z.string().min(8).max(15),
+  service: z.enum(services),
+  datetime: z.date(),
 });
