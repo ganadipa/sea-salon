@@ -27,7 +27,7 @@ export function ReviewForm({
 }) {
   const form = useForm({
     resolver: zodResolver(reviewFormSchema),
-    mode: "onChange",
+    mode: "onBlur",
     defaultValues: {
       name: "",
       description: "",

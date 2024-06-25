@@ -31,12 +31,26 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar } from "./ui/calendar";
 import { CalendarIcon } from "@radix-ui/react-icons";
+import { KeyboardEvent, useState } from "react";
 
 export function ReservationForm() {
   const form = useForm({
     resolver: zodResolver(reservationFormSchema),
-    mode: "onChange",
+    mode: "onBlur",
+    defaultValues: {
+      name: "",
+      phonenumber: "",
+      service: "",
+      date: undefined,
+      startTime: "09",
+    },
   });
+
+  const handleNonDigitKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (["e", "E", "+", "-"].includes(e.key)) {
+      e.preventDefault();
+    }
+  };
 
   return (
     <Form {...form}>
@@ -45,7 +59,7 @@ export function ReservationForm() {
         onSubmit={form.handleSubmit(async (data) => {
           const toastId = toast.loading("Submitting review...");
 
-          const resp = await actions.reviews.addReview(data);
+          const resp = await actions.reservations.addReservation(data);
 
           if (resp.ok) {
             toast.success(resp.description, { id: toastId });
@@ -74,9 +88,13 @@ export function ReservationForm() {
             <FormItem className="col-span-1">
               <FormLabel>Phone Number</FormLabel>
               <FormControl>
-                <Input placeholder="Abigail" type="number" {...field} />
+                <Input
+                  placeholder="08121212121"
+                  type="number"
+                  {...field}
+                  onKeyDown={handleNonDigitKeyDown}
+                />
               </FormControl>
-              <FormDescription>Your description review.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -110,10 +128,10 @@ export function ReservationForm() {
         />
         <FormField
           control={form.control}
-          name="dob"
+          name="date"
           render={({ field }) => (
             <FormItem className="col-span-2">
-              <FormLabel>Date of birth</FormLabel>
+              <FormLabel>Date</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -139,15 +157,13 @@ export function ReservationForm() {
                     selected={field.value}
                     onSelect={field.onChange}
                     disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
+                      date.getTime() <
+                      new Date().getTime() - 1000 * 60 * 60 * 24
                     }
                     initialFocus
                   />
                 </PopoverContent>
               </Popover>
-              <FormDescription>
-                Your date of birth is used to calculate your age.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -156,61 +172,34 @@ export function ReservationForm() {
           control={form.control}
           name="startTime"
           render={({ field }) => (
-            <FormItem className="col-span-1">
+            <FormItem className="col-span-2">
               <FormLabel>Start Time</FormLabel>
               <FormControl>
                 <div className="flex items-center gap-2">
                   <Input
                     placeholder="09"
-                    disabled
                     type="number"
                     {...field}
                     className="w-[40%]"
+                    onKeyDown={handleNonDigitKeyDown}
                   />
                   <p className="opacity-50">:</p>
                   <Input
                     placeholder="00"
                     disabled
                     type="number"
-                    {...field}
                     className="w-[40%]"
                   />
                 </div>
               </FormControl>
+              <FormDescription>
+                A service is estimated to be one hour long.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="endTime"
-          render={({ field }) => (
-            <FormItem className="col-span-1">
-              <FormLabel>End Time</FormLabel>
-              <FormControl className="">
-                <div className="flex items-center gap-2">
-                  <Input
-                    placeholder="10"
-                    disabled
-                    type="number"
-                    {...field}
-                    className="w-[40%]"
-                  />
-                  <p className="opacity-50">:</p>
-                  <Input
-                    placeholder="00"
-                    disabled
-                    type="number"
-                    {...field}
-                    className="w-[40%]"
-                  />
-                </div>
-              </FormControl>
-              <FormDescription>Your description review.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
         <div className="col-span-2 flex justify-end">
           <Button type="submit">Submit</Button>
         </div>

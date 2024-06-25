@@ -1,6 +1,7 @@
+import { addReservation } from "./reservations";
 import { addReview, getReviews } from "./reviews";
 
-export type TMutationnResponse = {
+export type TMutationResponse = {
   ok: boolean;
   description: string;
 };
@@ -11,5 +12,8 @@ export const actions = {
   reviews: {
     addReview,
     getReviews,
+  },
+  reservations: {
+    addReservation,
   },
 };
