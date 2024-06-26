@@ -36,7 +36,39 @@ export const dummyReviews = [
   },
 ];
 
-export const services = [
+type TUser = {
+  name: string;
+  email: string;
+  password: string;
+  role: "admin" | "customer";
+  phonenumber: string;
+};
+
+export const dummyUsers: TUser[] = [
+  {
+    name: "Alice Doe",
+    email: "alicedoe@gmail.com",
+    password: "password",
+    role: "customer",
+    phonenumber: "1234567890",
+  },
+  {
+    name: "Thomas N",
+    email: "thomas.n@compfest.id",
+    password: "Admin123",
+    role: "admin",
+    phonenumber: "08123456789",
+  },
+  {
+    name: "example",
+    email: "example@example.com",
+    password: "example",
+    role: "customer",
+    phonenumber: "1234567890",
+  },
+];
+
+export const initialServices = [
   "Haircuts and Styling",
   "Manicure and Pedicure",
   "Facial Treatments",

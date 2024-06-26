@@ -13,6 +13,7 @@
     "drizzle": "tsx src/drizzle/index.ts"
   },
   "dependencies": {
+    "@auth/drizzle-adapter": "^1.4.1",
     "@hookform/resolvers": "^3.6.0",
     "@neondatabase/serverless": "^0.9.3",
     "@radix-ui/react-dialog": "^1.1.1",
@@ -22,6 +23,8 @@
     "@radix-ui/react-popover": "^1.1.1",
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
+    "@types/bcrypt": "^5.0.2",
+    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
@@ -30,6 +33,7 @@
     "framer-motion": "^11.2.11",
     "lucide-react": "^0.396.0",
     "next": "14.2.4",
+    "next-auth": "5.0.0-beta.19",
     "react": "^18",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",

@@ -1,15 +1,7 @@
 import { neon } from "@neondatabase/serverless";
-import { NeonHttpDatabase, drizzle } from "drizzle-orm/neon-http";
-import { config } from "dotenv";
+import { drizzle } from "drizzle-orm/neon-http";
+import "dotenv/config";
 
-config({ path: ".env" });
+const sql = neon(process.env.DATABASE_URL!);
 
-let dbInstance: NeonHttpDatabase<Record<string, never>> | undefined;
-const getDbInstance = () => {
-  if (!dbInstance) {
-    dbInstance = drizzle(neon(process.env.DATABASE_URL!));
-  }
-  return dbInstance;
-};
-
-export const db = getDbInstance();
+export const db = drizzle(sql);

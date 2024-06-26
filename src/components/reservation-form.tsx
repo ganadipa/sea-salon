@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import { reservationFormSchema } from "@/lib/schemas";
 import { actions } from "@/actions/actions";
 import toast from "react-hot-toast";
-import { services } from "@/lib/const";
+import { initialServices } from "@/lib/const";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
@@ -112,7 +112,7 @@ export function ReservationForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {services.map((service) => (
+                  {initialServices.map((service) => (
                     <SelectItem key={service} value={service}>
                       {service}
                     </SelectItem>

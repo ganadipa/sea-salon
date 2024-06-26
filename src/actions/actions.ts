@@ -1,3 +1,4 @@
+import { signOutAction } from "./authentication";
 import { addReservation } from "./reservations";
 import { addReview, getReviews } from "./reviews";
 
@@ -16,4 +17,5 @@ export const actions = {
   reservations: {
     addReservation,
   },
+  auth: { signOutAction },
 };

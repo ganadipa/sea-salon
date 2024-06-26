@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { services } from "./const";
+import { initialServices } from "./const";
 
 export const reviewFormSchema = z.object({
   name: z
@@ -46,7 +46,7 @@ export const reservationFormSchema = z
       .max(15, {
         message: "Phone number must be at most 15 digits.",
       }),
-    service: z.enum(services, {
+    service: z.enum(initialServices, {
       message: "Service must be one of the available options.",
     }),
     date: z.date(),
@@ -76,3 +76,14 @@ export const reservationFormSchema = z
       path: ["date"],
     }
   );
+
+export const registerFormSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+  name: z.string().min(2).max(20),
+});
+
+export const loginFormSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+});
