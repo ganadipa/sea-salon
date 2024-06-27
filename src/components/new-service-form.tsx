@@ -13,24 +13,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
 
 import { Input } from "@/components/ui/input";
-import { newServiceFormSchema, reservationFormSchema } from "@/lib/schemas";
+import { newServiceFormSchema } from "@/lib/schemas";
 import { actions } from "@/actions/actions";
 import toast from "react-hot-toast";
-import { initialServices } from "@/lib/const";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { Calendar } from "./ui/calendar";
-import { CalendarIcon } from "@radix-ui/react-icons";
+
 import { KeyboardEvent, useState } from "react";
 import { useSession } from "next-auth/react";
 import { Textarea } from "./ui/textarea";
