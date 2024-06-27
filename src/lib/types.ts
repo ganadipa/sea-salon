@@ -1,8 +1,11 @@
 import { z } from "zod";
-import { dummyReviews } from "./const";
+import { dummyReviews, ServicesData } from "./const";
 
 export type TReviews = typeof dummyReviews;
 export type TReview = TReviews[0];
+
+export type TServices = typeof ServicesData;
+export type TService = TServices[0];
 
 export type ReservationsDatabaseColumn = {
   email: string | null;

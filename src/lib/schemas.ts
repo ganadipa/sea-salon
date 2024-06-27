@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { initialServices } from "./const";
 
 export const reviewFormSchema = z.object({
   name: z
@@ -46,21 +45,20 @@ export const reservationFormSchema = z
       .max(15, {
         message: "Phone number must be at most 15 digits.",
       }),
-    service: z.enum(initialServices, {
-      message: "Service must be one of the available options.",
-    }),
+    service: z.string(),
     date: z.date(),
-    startTime: z
-      .preprocess(
-        (val: unknown) => (val === "" ? 0 : parseInt(val as string, 10)),
-        z.number().int().min(9).max(20)
-      )
-      .refine((val) => val <= 20, {
-        message: "Our salon last appointment is at 8pm",
-      })
-      .refine((val) => val >= 9, {
-        message: "Our salon opens at 9am",
-      }),
+    startTime: z.preprocess(
+      (val: unknown) => (val === "" ? 0 : parseInt(val as string, 10)),
+      z
+        .number()
+        .int()
+        .min(9, {
+          message: "Our salon opens at 9am",
+        })
+        .max(20, {
+          message: "Our salon last appointment is at 8pm",
+        })
+    ),
   })
   .refine(
     (data) => {
@@ -117,15 +115,18 @@ export const newServiceFormSchema = z.object({
     .max(30, {
       message: "Service name must be at most 30 characters.",
     }),
-  duration: z
-    .number()
-    .int()
-    .min(1, {
-      message: "Duration must be at least 1 hour.",
-    })
-    .max(5, {
-      message: "Duration must be at most 5 hours.",
-    }),
+  duration: z.preprocess(
+    (val: unknown) => (val === "" ? 0 : parseInt(val as string, 10)),
+    z
+      .number()
+      .int()
+      .min(1, {
+        message: "Our service is at least 1 hour long.",
+      })
+      .max(5, {
+        message: "Our service is at most 5 hours long.",
+      })
+  ),
   description: z
     .string()
     .min(10, {

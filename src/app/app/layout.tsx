@@ -10,7 +10,6 @@ export default async function AppLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
-  console.log("session in layout", session);
   return (
     <main className="bg-white">
       <HeaderWrapper />

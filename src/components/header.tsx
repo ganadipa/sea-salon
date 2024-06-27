@@ -22,7 +22,6 @@ const routes = [
 
 export default function Header({ session }: { session: Session | null }) {
   const activePathname = usePathname();
-  console.log("session is", session);
 
   return (
     <header className="flex justify-between items-center border-b w-full border-white/10 py-2 max-w-[780px] mx-auto bg-zinc-800/20 px-4 -translate-x-1/2 rounded-b fixed top-0 left-1/2">

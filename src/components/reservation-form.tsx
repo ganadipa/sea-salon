@@ -25,7 +25,6 @@ import { Input } from "@/components/ui/input";
 import { reservationFormSchema } from "@/lib/schemas";
 import { actions } from "@/actions/actions";
 import toast from "react-hot-toast";
-import { initialServices } from "@/lib/const";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
@@ -33,8 +32,10 @@ import { Calendar } from "./ui/calendar";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { KeyboardEvent, useState } from "react";
 import { useSession } from "next-auth/react";
+import { z } from "zod";
+import { TServices } from "@/lib/types";
 
-export function ReservationForm() {
+export function ReservationForm({ services }: { services: TServices }) {
   const form = useForm({
     resolver: zodResolver(reservationFormSchema),
     mode: "onBlur",
@@ -115,9 +116,9 @@ export function ReservationForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {initialServices.map((service) => (
-                    <SelectItem key={service} value={service}>
-                      {service}
+                  {services.map((service) => (
+                    <SelectItem key={service.name} value={service.name}>
+                      {service.name}
                     </SelectItem>
                   ))}
                 </SelectContent>

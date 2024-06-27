@@ -53,7 +53,6 @@ export async function addReservation(
       description: "Successfully book the reservation",
     };
   } catch (error) {
-    console.log(error);
     ret = {
       ok: false,
       description: "Error adding review",

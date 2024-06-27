@@ -27,9 +27,8 @@ export async function addReview(review: unknown): Promise<TMutationResponse> {
     description: "Something unexpected happened",
   };
 
-  console.log(data);
   try {
-    console.log(new Date().toString());
+    new Date().toString();
     await db.insert(ReviewsTable).values({
       name: data.name,
       description: data.description,
@@ -64,13 +63,11 @@ export async function getReviews(): Promise<
 
   try {
     const reviews = await db.select().from(ReviewsTable);
-    console.log("reviews are", reviews);
     const reviewsWithoutId = reviews.map(({ id, ...rest }) => ({
       ...rest,
       createdAt: new Date(rest.createdAt),
     }));
     ret = reviewsWithoutId;
-    console.log("ret is", reviewsWithoutId);
   } catch (error) {
     ret = undefined;
   }

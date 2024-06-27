@@ -120,7 +120,8 @@ export const authenticators = pgTable(
 );
 
 export const servicesTable = pgTable("services", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  name: varchar("name", { length: 50 }).notNull(),
+  name: varchar("name", { length: 50 }).primaryKey(),
   duration: integer("duration").notNull(),
+  description: text("description"),
+  imageUrl: text("imageUrl"),
 });

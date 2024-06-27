@@ -1,20 +1,23 @@
 import "dotenv/config";
-import { ReservationsTable, ReviewsTable, users } from "./schema"; // Adjust this path to your actual schema fil
-import { dummyReviews, dummyUsers } from "@/lib/const";
+import {
+  ReservationsTable,
+  ReviewsTable,
+  servicesTable,
+  users,
+} from "./schema"; // Adjust this path to your actual schema fil
+import { ServicesData, dummyReviews, dummyUsers } from "@/lib/const";
 import bcrypt from "bcrypt";
 import { db } from ".";
 const seed = async () => {
   // const ret = await db.select().from(ReviewsTable);
-  // console.log(
   //   ret.map(({ id, ...rest }) => ({
   //     ...rest,
   //     createdAt: new Date(rest.createdAt).toLocaleString(),
   //   }))
   // );
-  await seedReviews();
-  await seedUsers();
-
-  console.log("Seeding completed");
+  // await seedReviews();
+  // await seedUsers();
+  await seedServices();
 };
 
 const seedReviews = async () => {
@@ -41,6 +44,20 @@ const seedUsers = async () => {
       role: user.role,
       phoneNumber: user.phonenumber,
     });
+  }
+};
+
+const seedServices = async () => {
+  for (const service of ServicesData) {
+    await db
+      .insert(servicesTable)
+      .values({
+        name: service.name,
+        duration: service.duration,
+        description: service.description,
+        imageUrl: service.imageUrl,
+      })
+      .execute();
   }
 };
 

@@ -40,9 +40,7 @@ export function SignIn() {
           let res;
           try {
             res = await actions.auth.signInAction(formdata);
-          } catch (error) {
-            console.log(error);
-          }
+          } catch (error) {}
 
           if (res && res.ok) {
             toast.success("Signed in successfully", { id: toastId });

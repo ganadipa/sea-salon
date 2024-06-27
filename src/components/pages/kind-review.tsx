@@ -5,7 +5,6 @@ import StarReview from "../star-review";
 
 export default async function KindReview() {
   const reviews = await actions.reviews.getReviews();
-  console.log(reviews);
   let averageRating = 0;
   if (reviews) {
     averageRating =
