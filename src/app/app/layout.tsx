@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import Header from "@/components/header";
+import HeaderWrapper from "@/components/header-wrapper";
 import NavBar from "@/components/navbar";
 import React from "react";
 
@@ -12,7 +13,7 @@ export default async function AppLayout({
   console.log("session in layout", session);
   return (
     <main className="bg-white">
-      <Header />
+      <HeaderWrapper />
       {children}
     </main>
   );

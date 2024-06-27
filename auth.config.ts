@@ -33,4 +33,7 @@ export default {
       return session;
     },
   },
+  pages: {
+    signIn: "/authentication",
+  },
 } satisfies NextAuthConfig;

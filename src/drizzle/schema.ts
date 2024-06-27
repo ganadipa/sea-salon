@@ -13,7 +13,6 @@ import {
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 
-export const servicesEnum = pgEnum("service", initialServices);
 export const roleEnum = pgEnum("role", ["admin", "customer"]);
 
 export const ReviewsTable = pgTable("reviews", {
@@ -34,7 +33,9 @@ export const ReservationsTable = pgTable("reservations", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: varchar("name", { length: 20 }).notNull(),
   phonenumber: varchar("phonenumber", { length: 15 }).notNull(),
-  service: servicesEnum("service").notNull(),
+  service: varchar("service", { length: 50 })
+    .notNull()
+    .references(() => servicesTable.name, { onDelete: "cascade" }),
   datetime: timestamp("datetime", {
     mode: "string",
     precision: 6,
@@ -49,17 +50,18 @@ export const ReservationsTable = pgTable("reservations", {
   })
     .notNull()
     .defaultNow(),
+  email: text("email"),
 });
 
 export const users = pgTable("user", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  name: text("name"),
-  email: text("email").notNull(),
-  phoneNumber: text("phoneNumber"),
-  password: text("password"),
-  role: roleEnum("role").default("customer"),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique().notNull(),
+  phoneNumber: text("phoneNumber").notNull(),
+  password: text("password").notNull(),
+  role: roleEnum("role").default("customer").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
 });
@@ -116,3 +118,9 @@ export const authenticators = pgTable(
     }),
   })
 );
+
+export const servicesTable = pgTable("services", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: varchar("name", { length: 50 }).notNull(),
+  duration: integer("duration").notNull(),
+});

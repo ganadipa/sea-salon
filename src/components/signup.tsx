@@ -15,7 +15,9 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { registerFormSchema } from "@/lib/schemas";
-import { register } from "@/actions/authentication";
+import { KeyboardEvent } from "react";
+import { actions } from "@/actions/actions";
+import toast from "react-hot-toast";
 
 export function SignUp() {
   const form = useForm({
@@ -25,15 +27,34 @@ export function SignUp() {
       name: "",
       email: "",
       password: "",
+      phonenumber: "",
     },
   });
+
+  const handleNonDigitKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (["e", "E", "+", "-"].includes(e.key)) {
+      e.preventDefault();
+    }
+  };
 
   return (
     <Form {...form}>
       <form
-        className="grid grid-cols-2 gap-4 p-8 bg-white border border-gray-200 rounded-lg w-[500px]"
+        className="grid grid-cols-2 gap-4"
         onSubmit={form.handleSubmit(async (data) => {
-          register(data);
+          const toastId = toast.loading("Signing up...");
+          const resp = await actions.auth.register(data);
+
+          if (resp.ok) {
+            toast.success("Signed up successfully", { id: toastId });
+          } else {
+            toast.error(resp.description || "Invalid input", { id: toastId });
+          }
+
+          let formdata = new FormData();
+          formdata.append("email", data.email);
+          formdata.append("password", data.password);
+          await actions.auth.signInAction(formdata);
         })}
       >
         <FormField
@@ -43,7 +64,27 @@ export function SignUp() {
             <FormItem className="col-span-1">
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Abigail" {...field} />
+                <Input placeholder="Abigail Junior" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="phonenumber"
+          render={({ field }) => (
+            <FormItem className="col-span-1">
+              <FormLabel>Phone Number</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="0812010203"
+                  {...field}
+                  type="number"
+                  {...field}
+                  onKeyDown={handleNonDigitKeyDown}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -54,23 +95,24 @@ export function SignUp() {
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem className="col-span-1">
+            <FormItem className="col-span-2">
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="Abigail" {...field} />
+                <Input placeholder="abigail.jr@gmail.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem className="col-span-1">
-              <FormLabel>password</FormLabel>
+            <FormItem className="col-span-2">
+              <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="Abigail" {...field} />
+                <Input placeholder="" type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

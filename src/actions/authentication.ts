@@ -8,9 +8,12 @@ import { TMutationResponse } from "./actions";
 import { db } from "@/drizzle";
 import { users } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
-import { signOut } from "@/auth";
+import { signIn, signOut } from "@/auth";
 import { revalidatePath } from "next/cache";
 import { sleep } from "@/lib/utils";
+import { AuthError } from "next-auth";
+import { isRedirectError } from "next/dist/client/components/redirect";
+import { redirect } from "next/dist/server/api-utils";
 
 export const register = async (
   values: z.infer<typeof registerFormSchema>
@@ -24,7 +27,7 @@ export const register = async (
     };
   }
 
-  const { email, password, name } = validatedValues.data;
+  const { email, phonenumber, password, name } = validatedValues.data;
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const existingUser = await db
@@ -42,6 +45,8 @@ export const register = async (
   await db.insert(users).values({
     email,
     name,
+    phoneNumber: phonenumber,
+    password: hashedPassword,
   });
 
   return {
@@ -53,4 +58,37 @@ export const register = async (
 export const signOutAction = async () => {
   await signOut();
   revalidatePath("/app", "layout");
+  revalidatePath("/");
+};
+
+export const signInAction: (
+  formData: FormData
+) => Promise<{ ok: boolean; description: string }> = async (
+  formData: FormData
+) => {
+  let res = {
+    ok: false,
+    description: "Something unexpected happened",
+  };
+
+  try {
+    await signIn("credentials", {
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+      redirect: false,
+    });
+    res = {
+      ok: true,
+      description: "Signed in successfully",
+    };
+  } catch (error) {
+    res = {
+      ok: false,
+      description: "Invalid credentials",
+    };
+  } finally {
+    await sleep(1000);
+    revalidatePath("/app", "layout");
+    return res;
+  }
 };

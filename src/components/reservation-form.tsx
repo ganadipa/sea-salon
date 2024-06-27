@@ -32,6 +32,7 @@ import { format } from "date-fns";
 import { Calendar } from "./ui/calendar";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { KeyboardEvent, useState } from "react";
+import { useSession } from "next-auth/react";
 
 export function ReservationForm() {
   const form = useForm({
@@ -51,6 +52,8 @@ export function ReservationForm() {
       e.preventDefault();
     }
   };
+
+  const session = useSession();
 
   return (
     <Form {...form}>

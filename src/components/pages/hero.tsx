@@ -14,7 +14,7 @@ export default function Hero() {
             className="text-white"
           />
         </header>
-        <Link href={"/app/reservations"}>
+        <Link href={"/app/dashboard"}>
           <Button>Book Now!</Button>
         </Link>
       </div>

@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { ReservationsTable, ReviewsTable, users } from "./schema"; // Adjust this path to your actual schema fil
 import { dummyReviews, dummyUsers } from "@/lib/const";
+import bcrypt from "bcrypt";
 import { db } from ".";
 const seed = async () => {
   // const ret = await db.select().from(ReviewsTable);
@@ -32,10 +33,11 @@ const seedReviews = async () => {
 
 const seedUsers = async () => {
   for (const user of dummyUsers) {
+    const hashedPassword = await bcrypt.hash(user.password, 10);
     await db.insert(users).values({
       name: user.name,
       email: user.email,
-      password: user.password,
+      password: hashedPassword,
       role: user.role,
       phoneNumber: user.phonenumber,
     });

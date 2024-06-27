@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import Logo from "./logo";
 import { cn } from "@/lib/utils";
 import { SignOut } from "./signout";
 import { useSession } from "next-auth/react";
-import { SignInButton } from "./signin";
+import { Session } from "next-auth";
 
 const routes = [
   {
@@ -15,18 +15,14 @@ const routes = [
     path: "/app",
   },
   {
-    label: "Reservations",
-    path: "/app/reservations",
-  },
-  {
     label: "Dashboard",
     path: "/app/dashboard",
   },
 ];
 
-export default function Header() {
+export default function Header({ session }: { session: Session | null }) {
   const activePathname = usePathname();
-  const session = useSession();
+  console.log("session is", session);
 
   return (
     <header className="flex justify-between items-center border-b w-full border-white/10 py-2 max-w-[780px] mx-auto bg-zinc-800/20 px-4 -translate-x-1/2 rounded-b fixed top-0 left-1/2">
@@ -35,7 +31,7 @@ export default function Header() {
       <nav>
         <ul className="flex gap-2 text-xs items-center">
           {routes.map((route) =>
-            !session.data?.user && route.path === "/app/dashboard" ? null : (
+            !session && route.path === "/app/dashboard" ? null : (
               <li key={route.path}>
                 <Link
                   href={route.path}
@@ -52,18 +48,14 @@ export default function Header() {
             )
           )}
           <li>
-            {session.data?.user ? (
+            {session ? (
               <SignOut
                 className={cn(
                   "text-white/70 rounded-sm px-2 py-1 hover:text-white focus:text-white transition font-semibold"
                 )}
               />
             ) : (
-              <SignInButton
-                className={cn(
-                  "text-white/70 rounded-sm px-2 py-1 hover:text-white focus:text-white transition font-semibold"
-                )}
-              />
+              <></>
             )}
           </li>
         </ul>

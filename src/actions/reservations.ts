@@ -6,16 +6,26 @@ import { ReservationsTable } from "@/drizzle/schema";
 import { sleep } from "@/lib/utils";
 
 import { db } from "@/drizzle";
+import { z } from "zod";
+import { auth } from "@/auth";
+import { desc, eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 export async function addReservation(
   reservation: unknown
 ): Promise<TMutationResponse> {
   const validatedReservation = reservationFormSchema.safeParse(reservation);
-  console.log(reservation);
   if (!validatedReservation.success) {
     return {
       ok: false,
       description: "Invalid review data",
+    };
+  }
+  const session = await auth();
+  if (!session) {
+    return {
+      ok: false,
+      description: "You need to be logged in to book a reservation",
     };
   }
 
@@ -35,6 +45,7 @@ export async function addReservation(
       service: data.service,
       createdAt: new Date().toISOString(),
       datetime: bookdate.toISOString(),
+      email: session!.user.email,
     });
 
     ret = {
@@ -51,7 +62,19 @@ export async function addReservation(
 
   await sleep(1000);
 
-  // revalidatePath("/app");
+  revalidatePath("/app/dashboard", "page");
 
   return ret;
+}
+
+export async function getAllReservations(email?: string) {
+  const reservations = await db
+    .select()
+    .from(ReservationsTable)
+    .where(email ? eq(ReservationsTable.email, email) : undefined)
+    .orderBy(desc(ReservationsTable.datetime));
+
+  revalidatePath("/app/dashboard", "page");
+
+  return reservations;
 }

@@ -1,5 +1,5 @@
-import { signOutAction } from "./authentication";
-import { addReservation } from "./reservations";
+import { signOutAction, signInAction, register } from "./authentication";
+import { addReservation, getAllReservations } from "./reservations";
 import { addReview, getReviews } from "./reviews";
 
 export type TMutationResponse = {
@@ -16,6 +16,11 @@ export const actions = {
   },
   reservations: {
     addReservation,
+    getAllReservations,
   },
-  auth: { signOutAction },
+  auth: { signInAction, signOutAction, register },
+  services: {
+    // addService,
+    // getServices,
+  },
 };

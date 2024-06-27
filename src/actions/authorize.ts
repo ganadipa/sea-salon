@@ -15,20 +15,19 @@ export const authorize = async (
     typeof email !== "string" ||
     typeof password !== "string"
   ) {
-    return new Error("Invalid input");
+    return null;
   }
 
   console.log("checking if email and password are valid");
   const theUser = await getTheUser(email);
   if (!theUser) {
-    return new Error("User not found");
+    return null;
   }
 
   console.log("checking if password is valid");
-  const pwHash = await bcrypt.hash(password, 10);
-  const match = await bcrypt.compare(password, pwHash);
+  const match = await bcrypt.compare(password, theUser.password);
   if (!match) {
-    return new Error("Invalid password");
+    return null;
   }
 
   console.log("returning the user");
