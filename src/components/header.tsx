@@ -56,16 +56,14 @@ export default function Header({ session }: { session: Session | null }) {
                 )}
               />
             ) : (
-              <li>
-                <Link
-                  href={"/app/dashboard"}
-                  className={cn(
-                    "text-white/70 rounded-sm px-2 py-1 hover:text-white focus:text-white transition font-semibold"
-                  )}
-                >
-                  Sign In
-                </Link>
-              </li>
+              <Link
+                href={"/app/dashboard"}
+                className={cn(
+                  "text-white/70 rounded-sm px-2 py-1 hover:text-white focus:text-white transition font-semibold"
+                )}
+              >
+                Sign In
+              </Link>
             )}
           </li>
         </ul>

@@ -33,16 +33,16 @@ async function CustomerPage({
   const services = await actions.services.getServices();
 
   return (
-    <main className="pt-16 min-h-screen md:bg-cyan-950 flex flex-col items-center gap-8 px-2">
-      <section className="md:w-[80%] w-full md:px-12 max-md:mx-2 py-8 rounded-xl bg-white text-zinc-600 flex flex-col gap-8 border items-center">
-        <h1 className="font-bold text-xl md:text-4xl md:text-cyan-950/50 text-zinc-800 ">
+    <main className="pt-16 min-h-screen lg:bg-cyan-950 flex flex-col items-center gap-8 px-2">
+      <section className="lg:w-[80%] w-full lg:px-12 max-lg:mx-2 py-8 rounded-xl bg-white text-zinc-600 flex flex-col gap-8 border items-center">
+        <h1 className="font-bold text-xl lg:text-4xl lg:text-cyan-950/50 text-zinc-800 ">
           {" "}
           Your Future Schedule{" "}
         </h1>
         <ReservationsTable reservations={schedules} future />
       </section>
 
-      <h1 className="font-bold text-lg md:text-4xl text-zinc-600 md:text-zinc-200">
+      <h1 className="font-bold text-lg lg:text-4xl text-zinc-600 lg:text-zinc-200">
         {" "}
         Reservation Form{" "}
       </h1>

@@ -18,11 +18,11 @@ export default function Services({ services }: { services: TServices }) {
       </div>
 
       {/* Button to show different services */}
-      <div className=" w-4/5 md:w-[800px]  bg-accent-yellow/20 px-12 py-4">
+      <div className=" w-4/5 lg:w-[800px]  bg-accent-yellow/20 px-12 py-4">
         <div className="overflow-x-scroll flex gap-4 items-center h-24">
           {services.map((service) => (
             <ServiceButton
-              key={service.imageUrl}
+              key={service.name}
               service={service}
               setShowingService={setShowingService}
               active={showingService === service}
@@ -46,7 +46,7 @@ function Service({ service }: { service: TService }) {
         </span>
       </div>
 
-      <div className="flex flex-col md:flex-row justify-around items-center mx-8 gap-8">
+      <div className="flex flex-col lg:flex-row justify-around items-center mx-8 gap-8">
         <Image
           src={service.imageUrl || "https://i.ibb.co.com/YbzR2BF/sea-salon.jpg"}
           alt={service.name}
@@ -80,7 +80,7 @@ function ServiceButton({
   return (
     <div
       className={cn(
-        "flex flex-col px-4 py-2 items-center justify-center cursor-pointer min-w-48 md:w-32 font-semibold h-full rounded bg-accent-yellow/40",
+        "flex flex-col px-4 py-2 items-center justify-center cursor-pointer min-w-48 lg:w-32 font-semibold h-full rounded bg-accent-yellow/40",
         { "bg-accent-yellow/90": active }
       )}
       onClick={() => {
