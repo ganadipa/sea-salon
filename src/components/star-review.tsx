@@ -21,7 +21,7 @@ export default function StarReview({
             xmlns="http://www.w3.org/2000/svg"
             version="1.1"
             viewBox="80 0 400 400"
-            className=""
+            className="w-8 h-8"
           >
             <polygon
               fill={id <= rating ? "yellow" : "none"}

@@ -19,11 +19,11 @@ export default function AddReviewButton() {
   return (
     <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-zinc-50 hover:bg-zinc-400 text-cyan-950 mb-8 self-start">
+        <Button className="bg-zinc-50 hover:bg-zinc-400 text-cyan-950 mb-8 md:self-start">
           Add a review
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-md:w-4/5">
         <DialogHeader>
           <DialogTitle>Add your reviews here.</DialogTitle>
           <DialogDescription></DialogDescription>

@@ -16,8 +16,22 @@ export default function ReservationsTable({
   reservations: ReservationsDatabaseColumn[];
   future?: boolean;
 }) {
+  let shownReservations = reservations;
+  if (future === undefined) {
+  } else {
+    const now = new Date();
+    shownReservations = reservations.filter((r) => {
+      const reservationDate = new Date(r.datetime);
+      return future ? reservationDate > now : reservationDate < now;
+    });
+  }
+
+  if (shownReservations.length === 0) {
+    return <div>No reservations found.</div>;
+  }
+
   return (
-    <Table className="rounded">
+    <Table className="rounded text-[8px] md:text-base">
       <TableCaption>A list of your future shedule.</TableCaption>
       <TableHeader>
         <TableRow className="text-bold bg-gray-500/40">

@@ -10,7 +10,7 @@ export default async function Page() {
   }
 
   return (
-    <main className="flex justify-center items-center min-h-screen overflow-x-hidden">
+    <main className="flex justify-center items-center min-h-screen overflow-x-hidden px-4">
       <AuthTabs />
     </main>
   );

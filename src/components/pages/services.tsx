@@ -8,9 +8,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 
 export default function Services({ services }: { services: TServices }) {
-  const [showingService, setShowingService] = useState<TService>(
-    ServicesData[0]
-  );
+  const [showingService, setShowingService] = useState<TService>(services[0]);
 
   return (
     <section className="min-h-screen flex flex-col items-center pb-24">
@@ -20,15 +18,17 @@ export default function Services({ services }: { services: TServices }) {
       </div>
 
       {/* Button to show different services */}
-      <div className="flex gap-4 items-center bg-accent-yellow/20 px-12 py-4">
-        {services.map((service) => (
-          <ServiceButton
-            key={service.imageUrl}
-            service={service}
-            setShowingService={setShowingService}
-            active={showingService === service}
-          />
-        ))}
+      <div className=" w-4/5 md:w-[800px]  bg-accent-yellow/20 px-12 py-4">
+        <div className="overflow-x-scroll flex gap-4 items-center h-24">
+          {services.map((service) => (
+            <ServiceButton
+              key={service.imageUrl}
+              service={service}
+              setShowingService={setShowingService}
+              active={showingService === service}
+            />
+          ))}
+        </div>
       </div>
 
       {/* Current showing service */}
@@ -46,19 +46,22 @@ function Service({ service }: { service: TService }) {
         </span>
       </div>
 
-      <div className="flex justify-around gap-8">
-        {service.imageUrl ? (
-          <Image
-            src={service.imageUrl}
-            alt={service.name}
-            width={300}
-            height={300}
-            className="w-[300px] h-[300px] rounded-xl border border-yellow-400"
-          />
-        ) : null}
+      <div className="flex flex-col md:flex-row justify-around items-center mx-8 gap-8">
+        <Image
+          src={service.imageUrl || "https://i.ibb.co.com/YbzR2BF/sea-salon.jpg"}
+          alt={service.name}
+          width={300}
+          height={300}
+          className="w-[300px] h-[300px] rounded-xl border border-yellow-400"
+        />
 
-        <article className="max-w-[400px] max-h-[300px] text-justify opacity-60">
-          {service.description}
+        <article className="max-w-[400px] h-[300px] text-justify opacity-60 overflow-x-hidden overflow-y-scroll">
+          <div className="mb-8 font-bold">
+            {service.imageUrl
+              ? ""
+              : "Image shown above is only a placeholder, because we do not have the image for this service."}
+          </div>
+          {service.description || "No description available."}
         </article>
       </div>
     </div>
@@ -77,7 +80,7 @@ function ServiceButton({
   return (
     <div
       className={cn(
-        "flex flex-col px-4 py-2 items-center justify-center cursor-pointer w-32  gap-4 font-semibold aspect-square rounded bg-accent-yellow/40",
+        "flex flex-col px-4 py-2 items-center justify-center cursor-pointer min-w-48 md:w-32 font-semibold h-full rounded bg-accent-yellow/40",
         { "bg-accent-yellow/90": active }
       )}
       onClick={() => {

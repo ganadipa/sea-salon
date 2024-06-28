@@ -11,7 +11,7 @@ export default async function AppLayout({
 }) {
   const session = await auth();
   return (
-    <main className="bg-white">
+    <main className="bg-white ">
       <HeaderWrapper />
       {children}
     </main>

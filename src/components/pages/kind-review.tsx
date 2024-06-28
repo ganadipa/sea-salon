@@ -11,7 +11,7 @@ export default async function KindReview() {
       reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
   }
   return (
-    <section className="bg-cyan-950 min-h-[300px] py-16 px-32 flex flex-col items-center ">
+    <section className="bg-cyan-950 min-h-[300px] py-8 px-8 md:py-16 md:px-32 flex flex-col items-center ">
       <h1 className="text-slate-100 text-center font-bold text-4xl mb-8">
         Our Reviews
       </h1>
@@ -23,7 +23,7 @@ export default async function KindReview() {
         speed="slow"
       />
 
-      <div className="mt-4 bg-white rounded-lg py-4 px-8 self-center">
+      <div className="mt-4 bg-white rounded-lg py-4 px-8 self-center flex flex-col items-center gap-4">
         <StarReview rating={Math.round(averageRating)} className="" />
 
         <p className="font-semibold text-center text-cyan-950">
