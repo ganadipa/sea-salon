@@ -138,3 +138,33 @@ export const newServiceFormSchema = z.object({
     .optional(),
   imageUrl: z.string().optional(),
 });
+export const newBranchFormSchema = z
+  .object({
+    branchName: z
+      .string()
+      .min(5, {
+        message: "Branch name must be at least 5 characters.",
+      })
+      .max(50, {
+        message: "Branch name must be at most 50 characters.",
+      }),
+    branchLocation: z
+      .string()
+      .min(10, {
+        message: "Address must be at least 10 characters.",
+      })
+      .max(80, {
+        message: "Address must be at most 80 characters.",
+      }),
+    startTime: z.preprocess(
+      (val: unknown) => (val === "" ? 0 : parseInt(val as string, 10)),
+      z.number().int().min(0).max(24)
+    ),
+    endTime: z.preprocess(
+      (val: unknown) => (val === "" ? 0 : parseInt(val as string, 10)),
+      z.number().int().min(0).max(24)
+    ),
+  })
+  .refine((data) => data.startTime < data.endTime, {
+    message: "Start time must be before end time.",
+  });

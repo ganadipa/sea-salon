@@ -1,5 +1,7 @@
 import { actions } from "@/actions/actions";
 import { auth, signIn } from "@/auth";
+import AdminTabs from "@/components/admin-tabs";
+import { NewBranch } from "@/components/new-branch-form";
 import { NewService } from "@/components/new-service-form";
 import { ReservationForm } from "@/components/reservation-form";
 import ReservationsTable from "@/components/reservation-table";
@@ -54,8 +56,9 @@ async function CustomerPage({
 function AdminPage({ schedules }: { schedules: ReservationsDatabaseColumn[] }) {
   return (
     <main className="pt-16 min-h-screen bg-cyan-950 flex flex-col items-center gap-8">
-      <h1 className="font-bold text-4xl text-zinc-200"> Add New Service </h1>
-      <NewService />
+      <section className="flex flex-row max-lg:flex-row gap-8 items-center justify-around bg-zinc-200/70 py-8 px-12">
+        <AdminTabs />
+      </section>
 
       <section className="w-[80%] px-12 py-8 rounded-xl bg-white text-zinc-600 flex flex-col gap-8 items-center mt-12">
         <h1 className="font-bold text-4xl text-cyan-950/50 ">
