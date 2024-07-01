@@ -84,19 +84,19 @@ const seedBranchServiceRelation = async () => {
   }
 };
 
-const seedServices = async () => {
-  for (const service of ServicesData) {
-    await db
-      .insert(servicesTable)
-      .values({
-        name: service.name,
-        duration: service.duration,
-        description: service.description,
-        imageUrl: service.imageUrl,
-      })
-      .execute();
-  }
-};
+// const seedServices = async () => {
+//   for (const service of ServicesData) {
+//     await db
+//       .insert(servicesTable)
+//       .values({
+//         name: service.name,
+//         duration: service.duration,
+//         description: service.description,
+//         imageUrl: service.imageUrl,
+//       })
+//       .execute();
+//   }
+// };
 
 seed().catch((error) => {
   console.error("Error seeding data:", error);
