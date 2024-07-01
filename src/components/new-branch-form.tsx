@@ -119,7 +119,7 @@ export function NewBranch() {
                   className="h-[50px]"
                 />
               </FormControl>
-              <FormDescription>Service's Description.</FormDescription>
+              <FormDescription>Service&apos;s Description.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
