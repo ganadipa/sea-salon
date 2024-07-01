@@ -2,10 +2,18 @@ import "dotenv/config";
 import {
   ReservationsTable,
   ReviewsTable,
+  branchesTable,
+  servicesBranchesTable,
   servicesTable,
   users,
 } from "./schema"; // Adjust this path to your actual schema fil
-import { ServicesData, dummyReviews, dummyUsers } from "@/lib/const";
+import {
+  ServicesData,
+  dummyBranchServiceRelation,
+  dummyBranches,
+  dummyReviews,
+  dummyUsers,
+} from "@/lib/const";
 import bcrypt from "bcrypt";
 import { db } from ".";
 const seed = async () => {
@@ -17,7 +25,10 @@ const seed = async () => {
   // );
   // await seedReviews();
   // await seedUsers();
-  await seedServices();
+  // await seedServices();
+
+  await seedBranches();
+  await seedBranchServiceRelation();
 };
 
 const seedReviews = async () => {
@@ -44,6 +55,32 @@ const seedUsers = async () => {
       role: user.role,
       phoneNumber: user.phonenumber,
     });
+  }
+};
+
+const seedBranches = async () => {
+  for (const branch of dummyBranches) {
+    await db
+      .insert(branchesTable)
+      .values({
+        name: branch.branchName,
+        location: branch.address,
+        startTime: branch.openingTime,
+        endTime: branch.closingTime,
+      })
+      .execute();
+  }
+};
+
+const seedBranchServiceRelation = async () => {
+  for (const rel of dummyBranchServiceRelation) {
+    await db
+      .insert(servicesBranchesTable)
+      .values({
+        service: rel.serviceName,
+        branch: rel.branchName,
+      })
+      .execute();
   }
 };
 
