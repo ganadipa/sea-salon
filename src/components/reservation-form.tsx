@@ -63,7 +63,22 @@ export function ReservationForm({ services }: { services: TServices }) {
         onSubmit={form.handleSubmit(async (data) => {
           const toastId = toast.loading("Submitting review...");
 
-          const resp = await actions.reservations.addReservation(data);
+          if (!data.date || !data.startTime) {
+            toast.error("Please select a date and time", { id: toastId });
+            return;
+          }
+
+          const submitData = {
+            ...data,
+            datetime: new Date(
+              (data.date as Date).getFullYear(),
+              (data.date as Date).getMonth(),
+              (data.date as Date).getDate(),
+              parseInt(data.startTime),
+              0
+            ).toISOString(),
+          };
+          const resp = await actions.reservations.addReservation(submitData);
 
           if (resp.ok) {
             toast.success(resp.description, { id: toastId });
