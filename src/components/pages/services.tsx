@@ -1,14 +1,28 @@
 "use client";
 
-import { ServicesData } from "@/lib/const";
-import { TService, TServices } from "@/lib/types";
+import { actions } from "@/actions/actions";
+import { TBranch, TService, TServices } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { EyeClosedIcon, HandIcon, ScissorsIcon } from "@radix-ui/react-icons";
-import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function Services({ services }: { services: TServices }) {
   const [showingService, setShowingService] = useState<TService>(services[0]);
+  const [servicesBranches, setServicesBranches] = useState<
+    {
+      service: string | null;
+      branch: string | null;
+    }[]
+  >([]);
+  const [branches, setBranches] = useState<TBranch[]>([]);
+
+  useEffect(() => {
+    const fetchBranches = async () => {
+      setServicesBranches(await actions.branch.getServicesBranches());
+      setBranches(await actions.branch.getBranches());
+    };
+
+    fetchBranches();
+  }, []);
 
   return (
     <section className="min-h-screen flex flex-col items-center pb-24">
@@ -18,7 +32,7 @@ export default function Services({ services }: { services: TServices }) {
       </div>
 
       {/* Button to show different services */}
-      <div className=" w-4/5 lg:w-[800px]  bg-accent-yellow/20 px-12 py-4">
+      <div className=" max-w-4/5 lg:w-[800px]  bg-accent-yellow/20 px-12 py-4">
         <div className="overflow-x-scroll flex gap-4 items-center h-24">
           {services.map((service) => (
             <ServiceButton
@@ -32,38 +46,56 @@ export default function Services({ services }: { services: TServices }) {
       </div>
 
       {/* Current showing service */}
-      <Service service={showingService} />
+      <Service
+        service={showingService}
+        relation={servicesBranches}
+        branches={branches}
+      />
     </section>
   );
 }
 
-function Service({ service }: { service: TService }) {
+function Service({
+  service,
+  relation,
+  branches,
+}: {
+  service: TService;
+  relation: {
+    service: string | null;
+    branch: string | null;
+  }[];
+  branches: TBranch[];
+}) {
   return (
-    <div className="flex flex-col w-full items-center gap-8">
+    <div className="flex flex-col w-full items-center gap-8 mt-8">
       <div>
-        <span className="font-semibold text-3xl w-full mt-4 block">
+        <span className="font-semibold text-3xl w-full mt-4">
           {service.name}
         </span>
       </div>
-
-      <div className="flex flex-col lg:flex-row justify-around items-center mx-8 gap-8">
-        <Image
-          src={service.imageUrl || "https://i.ibb.co.com/YbzR2BF/sea-salon.jpg"}
-          alt={service.name}
-          width={300}
-          height={300}
-          className="w-[300px] h-[300px] rounded-xl border border-yellow-400"
-        />
-
-        <article className="max-w-[400px] h-[300px] text-justify opacity-60 overflow-x-hidden overflow-y-scroll">
-          <div className="mb-8 font-bold">
-            {service.imageUrl
-              ? ""
-              : "Image shown above is only a placeholder, because we do not have the image for this service."}
-          </div>
-          {service.description || "No description available."}
-        </article>
-      </div>
+      is available at:
+      {
+        <div className="flex flex-wrap gap-4">
+          {relation
+            .filter((r) => r.service === service.name)
+            .map((r) => {
+              const branch = branches.find((b) => b.name === r.branch);
+              return (
+                <div
+                  key={r.branch}
+                  className="flex flex-col gap-2 bg-white p-4 rounded-lg shadow-md"
+                >
+                  <span className="font-semibold">{branch?.name}</span>
+                  <span>{branch?.location}</span>
+                  <span>
+                    {branch?.startTime}:00 - {branch?.endTime}:00
+                  </span>
+                </div>
+              );
+            })}
+        </div>
+      }
     </div>
   );
 }

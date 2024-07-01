@@ -5,7 +5,7 @@ import { NewBranch } from "./new-branch-form";
 
 export default function AdminTabs() {
   return (
-    <Tabs defaultValue="new-service" className="w-[400px] grid grid-cols-2">
+    <Tabs defaultValue="new-service" className=" grid grid-cols-2">
       <TabsList className="col-span-2 row-span-1">
         <TabsTrigger value="new-service" className="w-full">
           Add New Service

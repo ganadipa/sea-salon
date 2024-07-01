@@ -2,11 +2,19 @@
 
 import { TMutationResponse } from "./actions";
 import { newServiceFormSchema } from "@/lib/schemas";
-import { servicesTable } from "@/drizzle/schema";
+import { servicesBranchesTable, servicesTable } from "@/drizzle/schema";
 import { db } from "@/drizzle";
+import { NeonDbError } from "@neondatabase/serverless";
+import { z } from "zod";
+
+const ZAddService = z.object({
+  serviceName: z.string(),
+  duration: z.number(),
+  branchName: z.string(),
+});
 
 export async function addService(service: unknown): Promise<TMutationResponse> {
-  const validatedService = newServiceFormSchema.safeParse(service);
+  const validatedService = ZAddService.safeParse(service);
   if (!validatedService.success) {
     return {
       ok: false,
@@ -23,8 +31,11 @@ export async function addService(service: unknown): Promise<TMutationResponse> {
     await db.insert(servicesTable).values({
       name: validatedService.data.serviceName,
       duration: validatedService.data.duration,
-      description: validatedService.data.description,
-      imageUrl: validatedService.data.imageUrl,
+    });
+
+    await db.insert(servicesBranchesTable).values({
+      service: validatedService.data.serviceName,
+      branch: validatedService.data.branchName,
     });
 
     ret = {
@@ -32,10 +43,24 @@ export async function addService(service: unknown): Promise<TMutationResponse> {
       description: "Successfully added the service",
     };
   } catch (error) {
-    ret = {
-      ok: false,
-      description: "Error adding service",
-    };
+    if (error instanceof NeonDbError) {
+      if (error.code === "23505") {
+        ret = {
+          ok: false,
+          description: "Service already exists",
+        };
+      } else {
+        ret = {
+          ok: false,
+          description: "Error adding service",
+        };
+      }
+    } else {
+      ret = {
+        ok: false,
+        description: "Error adding service",
+      };
+    }
   }
 
   return ret;

@@ -10,11 +10,19 @@ import { z } from "zod";
 import { auth } from "@/auth";
 import { desc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { datetime } from "drizzle-orm/mysql-core";
+
+const AddReservationData = z.object({
+  name: z.string(),
+  phonenumber: z.string(),
+  service: z.string(),
+  datetime: z.string(),
+});
 
 export async function addReservation(
   reservation: unknown
 ): Promise<TMutationResponse> {
-  const validatedReservation = reservationFormSchema.safeParse(reservation);
+  const validatedReservation = AddReservationData.safeParse(reservation);
   if (!validatedReservation.success) {
     return {
       ok: false,
@@ -36,15 +44,13 @@ export async function addReservation(
     description: "Something unexpected happened",
   };
 
-  const bookdate = new Date(data.date);
-  bookdate.setHours(data.startTime, 0, 0, 0);
   try {
     await db.insert(ReservationsTable).values({
       name: data.name,
       phonenumber: data.phonenumber,
       service: data.service,
       createdAt: new Date().toISOString(),
-      datetime: bookdate.toISOString(),
+      datetime: data.datetime,
       email: session!.user.email,
     });
 
