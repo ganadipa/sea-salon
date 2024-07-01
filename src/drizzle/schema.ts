@@ -121,8 +121,6 @@ export const authenticators = pgTable(
 export const servicesTable = pgTable("services", {
   name: varchar("name", { length: 50 }).primaryKey(),
   duration: integer("duration").notNull(),
-  description: text("description"),
-  imageUrl: text("imageUrl"),
 });
 
 export const branchesTable = pgTable("branches", {

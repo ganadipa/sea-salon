@@ -16,3 +16,10 @@ export type ReservationsDatabaseColumn = {
   datetime: string;
   createdAt: string;
 };
+
+export type TBranch = {
+  name: string;
+  location: string | null;
+  startTime: number;
+  endTime: number;
+};

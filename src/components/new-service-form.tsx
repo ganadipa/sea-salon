@@ -19,19 +19,30 @@ import { newServiceFormSchema } from "@/lib/schemas";
 import { actions } from "@/actions/actions";
 import toast from "react-hot-toast";
 
-import { KeyboardEvent, useState } from "react";
+import { KeyboardEvent, use, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { Textarea } from "./ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { TBranch } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 export function NewService() {
+  const [branches, setBranches] = useState<TBranch[]>([]);
+  const [selectedBranch, setSelectedBranch] = useState<TBranch | null>(null);
+
   const form = useForm({
     resolver: zodResolver(newServiceFormSchema),
     mode: "onBlur",
     defaultValues: {
+      branchName: "",
       serviceName: "",
       duration: "",
-      description: "",
-      imageUrl: "",
     },
   });
 
@@ -43,6 +54,15 @@ export function NewService() {
 
   const session = useSession();
 
+  useEffect(() => {
+    const fetchBranches = async () => {
+      setBranches(await actions.branch.getBranches());
+    };
+    fetchBranches();
+  }, []);
+
+  console.log(branches);
+
   return (
     <Form {...form}>
       <form
@@ -50,7 +70,15 @@ export function NewService() {
         onSubmit={form.handleSubmit(async (data) => {
           const toastId = toast.loading("Adding new service...");
 
-          const resp = await actions.services.addService(data);
+          if (!selectedBranch) {
+            toast.error("Please select a branch", { id: toastId });
+            return;
+          }
+
+          const resp = await actions.services.addService({
+            ...data,
+            branchName: selectedBranch.name,
+          });
 
           if (resp.ok) {
             toast.success(resp.description, { id: toastId });
@@ -61,12 +89,52 @@ export function NewService() {
       >
         <FormField
           control={form.control}
+          name="branchName"
+          render={({ field }) => (
+            <FormItem className="col-span-2">
+              <FormLabel>Branch Name</FormLabel>
+              <Select
+                onValueChange={(value) => {
+                  const branch = branches.find((b) => b.name === value);
+                  setSelectedBranch(branch || null);
+                  field.onChange(value);
+                }}
+                defaultValue={field.value}
+                value={selectedBranch?.name}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a branch name" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {branches.map((branch) => (
+                    <SelectItem key={branch.name} value={branch.name}>
+                      {branch.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormDescription>
+                Select for which branch you want to add a new service.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="serviceName"
           render={({ field }) => (
             <FormItem className="col-span-1">
               <FormLabel>Service Name</FormLabel>
               <FormControl>
-                <Input placeholder="Haircuts and Styling" {...field} />
+                <Input
+                  placeholder="Haircuts and Styling"
+                  {...field}
+                  disabled={selectedBranch === null}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -84,49 +152,18 @@ export function NewService() {
                   type="number"
                   {...field}
                   onKeyDown={handleNonDigitKeyDown}
+                  disabled={selectedBranch === null}
                 />
               </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="imageUrl"
-          render={({ field }) => (
-            <FormItem className="col-span-2">
-              <FormLabel>Image URL</FormLabel>
-              <FormControl>
-                <Input placeholder="" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem className="col-span-2">
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="The pedicure service was excellent, and my feet feel incredibly soft."
-                  {...field}
-                  spellCheck={false}
-                  className="h-[50px]"
-                />
-              </FormControl>
-              <FormDescription>Your description review.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
         <div className="col-span-2 flex justify-end">
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={selectedBranch === null}>
+            Submit
+          </Button>
         </div>
       </form>
     </Form>
