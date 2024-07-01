@@ -124,3 +124,27 @@ export const servicesTable = pgTable("services", {
   description: text("description"),
   imageUrl: text("imageUrl"),
 });
+
+export const branchesTable = pgTable("branches", {
+  name: varchar("name", { length: 50 }).primaryKey(),
+  location: text("location"),
+  startTime: integer("startTime").notNull(),
+  endTime: integer("endTime").notNull(),
+});
+
+// many to many relationship between services and branches
+export const servicesBranchesTable = pgTable(
+  "services_branches",
+  {
+    service: varchar("service", { length: 50 }),
+    branch: varchar("branch", { length: 50 }).references(
+      () => branchesTable.name,
+      { onDelete: "cascade" }
+    ),
+  },
+  (table) => ({
+    compoundKey: primaryKey({
+      columns: [table.service, table.branch],
+    }),
+  })
+);

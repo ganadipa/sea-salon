@@ -105,3 +105,56 @@ export const ServicesData: TService[] = [
     duration: 1,
   },
 ];
+/**
+ * Branch name
+● Branch location
+● Opening time
+● Closing time
+ */
+export const dummyBranches = [
+  {
+    branchName: "Main Branch",
+    address: "123 Main St, New York, NY 10001",
+    openingTime: 9,
+    closingTime: 21,
+  },
+  {
+    branchName: "Downtown Branch",
+    address: "456 Downtown St, New York, NY 10002",
+    openingTime: 9,
+    closingTime: 15,
+  },
+  {
+    branchName: "Uptown Branch",
+    address: "789 Uptown St, New York, NY 10003",
+    openingTime: 10,
+    closingTime: 18,
+  },
+];
+
+export const dummyBranchServiceRelation = [
+  {
+    branchName: "Main Branch",
+    serviceName: "Haircuts and Styling",
+  },
+  {
+    branchName: "Main Branch",
+    serviceName: "Menicure and Pedicure",
+  },
+  {
+    branchName: "Main Branch",
+    serviceName: "Facial Treatments",
+  },
+  {
+    branchName: "Downtown Branch",
+    serviceName: "Haircuts and Styling",
+  },
+  {
+    branchName: "Downtown Branch",
+    serviceName: "Menicure and Pedicure",
+  },
+  {
+    branchName: "Uptown Branch",
+    serviceName: "Facial Treatments",
+  },
+];
