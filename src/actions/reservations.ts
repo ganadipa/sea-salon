@@ -17,6 +17,7 @@ const AddReservationData = z.object({
   phonenumber: z.string(),
   service: z.string(),
   datetime: z.string(),
+  duration: z.number(),
 });
 
 export async function addReservation(
@@ -52,6 +53,7 @@ export async function addReservation(
       createdAt: new Date().toISOString(),
       datetime: data.datetime,
       email: session!.user.email,
+      duration: data.duration,
     });
 
     ret = {

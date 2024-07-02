@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "../ui/button";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
 
 const contacts = [
   {
@@ -21,10 +22,12 @@ export default function ContactUs() {
       </h1>
       <div className="flex md:flex-row flex-col gap-2 mt-8">
         {contacts.map((contact, idx) => (
-          <Button key={idx}>
-            <PaperPlaneIcon className="mr-2" /> | {contact.name} |{" "}
-            {contact.number}
-          </Button>
+          <Link key={idx} href={`https://wa.me/+62${contact.number.slice(1)}`}>
+            <Button>
+              <PaperPlaneIcon className="mr-2" /> | {contact.name} |{" "}
+              {contact.number}
+            </Button>
+          </Link>
         ))}
       </div>
     </section>

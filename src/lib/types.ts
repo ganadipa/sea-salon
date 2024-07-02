@@ -15,6 +15,7 @@ export type ReservationsDatabaseColumn = {
   service: string;
   datetime: string;
   createdAt: string;
+  duration: number | null;
 };
 
 export type TBranch = {
