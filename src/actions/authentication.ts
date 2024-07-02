@@ -57,7 +57,7 @@ export const register = async (
 
 export const signOutAction = async () => {
   await signOut();
-  revalidatePath("/app", "layout");
+  revalidatePath("/", "layout");
 };
 
 export const signInAction: (
@@ -87,7 +87,7 @@ export const signInAction: (
     };
   } finally {
     await sleep(1000);
-    revalidatePath("/app", "layout");
+    revalidatePath("/", "layout");
     return res;
   }
 };
