@@ -24,11 +24,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${inter.className} bg-white overflow-x-hidden`}>
         <SessionProvider session={session}>
-          <div className="max-w-[2000px] mx-auto">
-            <HeaderWrapper />
-
-            {children}
-          </div>
+          <div className="max-w-[2000px] mx-auto">{children}</div>
         </SessionProvider>
         <Toaster />
       </body>
