@@ -1,6 +1,5 @@
 import { auth } from "@/auth";
 import AuthTabs from "@/components/auth-tabs";
-import HeaderWrapper from "@/components/header-wrapper";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -12,8 +11,6 @@ export default async function Page() {
 
   return (
     <main className="flex justify-center items-center min-h-screen overflow-x-hidden px-4">
-      <HeaderWrapper />
-
       <AuthTabs />
     </main>
   );

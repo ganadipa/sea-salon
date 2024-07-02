@@ -53,9 +53,8 @@ export default function ReservationsTable({
                 <TableCell>{r.phonenumber}</TableCell>
                 <TableCell>{r.service}</TableCell>
                 <TableCell>
-                  {new Date(r.datetime).toLocaleDateString()}
-                  {"   "}
-                  {new Date(r.datetime).toLocaleTimeString()}
+                  {new Date(r.datetime).toLocaleDateString("id-ID")}{" "}
+                  {new Date(r.datetime).toLocaleTimeString("id-ID")}
                 </TableCell>
                 <TableCell className="text-right">
                   {r.duration || "-"} {r.duration && " hour(s)"}
@@ -92,9 +91,8 @@ export default function ReservationsTable({
                   <TableCell>{r.phonenumber}</TableCell>
                   <TableCell>{r.service}</TableCell>
                   <TableCell>
-                    {new Date(r.datetime).toLocaleDateString()}
-                    {"   "}
-                    {new Date(r.datetime).toLocaleTimeString()}
+                    {new Date(r.datetime).toLocaleDateString("id-ID")}{" "}
+                    {new Date(r.datetime).toLocaleTimeString("id-ID")}
                   </TableCell>
                   <TableCell className="text-right">
                     {r.duration || "-"} {r.duration && " hour(s)"}
