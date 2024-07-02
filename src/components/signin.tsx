@@ -21,7 +21,13 @@ import toast from "react-hot-toast";
 import { sleep } from "@/lib/utils";
 import { redirect } from "next/navigation";
 
-export function SignIn() {
+export function SignIn({
+  isSubmitting,
+  setIsSubmitting,
+}: {
+  isSubmitting: boolean;
+  setIsSubmitting: (value: boolean) => void;
+}) {
   const form = useForm({
     resolver: zodResolver(loginFormSchema),
     mode: "onBlur",
@@ -37,6 +43,7 @@ export function SignIn() {
         className="flex flex-col gap-4"
         action={async (formdata) => {
           const toastId = toast.loading("Signing in...");
+          setIsSubmitting(true);
           let res;
           try {
             res = await actions.auth.signInAction(formdata);
@@ -45,11 +52,13 @@ export function SignIn() {
           if (res && res.ok) {
             toast.success("Signed in successfully", { id: toastId });
             await sleep(1000);
+            setIsSubmitting(false);
             redirect("/app/dashboard");
           } else {
             toast.error(res?.description || "Invalid credentials", {
               id: toastId,
             });
+            setIsSubmitting(false);
           }
         }}
       >
@@ -80,7 +89,9 @@ export function SignIn() {
           )}
         />
         <div className="col-span-2 flex justify-end">
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={isSubmitting}>
+            Submit
+          </Button>
         </div>
       </form>
     </Form>

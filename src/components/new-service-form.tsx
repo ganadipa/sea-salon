@@ -56,7 +56,7 @@ export function NewService() {
 
   useEffect(() => {
     const fetchBranches = async () => {
-      setBranches(await actions.branch.getBranches());
+      setBranches(await actions.branch.getAllBranches());
     };
     fetchBranches();
   }, []);
@@ -66,7 +66,7 @@ export function NewService() {
   return (
     <Form {...form}>
       <form
-        className="grid grid-cols-2 gap-4 p-8 bg-white border border-gray-200 rounded-lg w-[500px]"
+        className="grid grid-cols-2 gap-4 lg:p-8 p-4 bg-white border border-gray-200 rounded-lg w-full h-full lg:w-[500px]"
         onSubmit={form.handleSubmit(async (data) => {
           const toastId = toast.loading("Adding new service...");
 

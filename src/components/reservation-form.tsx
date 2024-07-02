@@ -30,19 +30,83 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar } from "./ui/calendar";
 import { CalendarIcon } from "@radix-ui/react-icons";
-import { KeyboardEvent, useState } from "react";
+import { KeyboardEvent, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { z } from "zod";
-import { TServices } from "@/lib/types";
+import { TBranch, TService, TServices } from "@/lib/types";
 
 export function ReservationForm({ services }: { services: TServices }) {
+  const [selectedService, setSelectedService] = useState<TService | null>(null);
+  const [branchesOptions, setBranchesOptions] = useState<TBranch[]>([]);
+  const [selectedBranch, setSelectedBranch] = useState<TBranch | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    async function fetchBranches() {
+      if (selectedService) {
+        setBranchesOptions(
+          await actions.branch.getBranches(selectedService.name)
+        );
+      }
+    }
+    fetchBranches();
+  }, [selectedService]);
+
+  useEffect(() => {
+    if (selectedService) {
+      setSelectedBranch(null);
+    }
+  }, [selectedService]);
+
+  const openTime = selectedBranch?.startTime || 9;
+  const lastOrder =
+    (selectedBranch?.endTime || 21) - (selectedService?.duration || 1);
+  const dynamicReservationFormSchema = reservationFormSchema
+    .merge(
+      z.object({
+        startTime: z.preprocess(
+          (val: unknown) => (val === "" ? 0 : parseInt(val as string, 10)),
+          z
+            .number()
+            .int()
+            .min(openTime, {
+              message:
+                "Our salon opens at " +
+                (openTime > 12 ? openTime - 12 : openTime) +
+                (openTime > 12 ? "pm" : "am"),
+            })
+            .max(lastOrder, {
+              message:
+                "The last order for this service is at " +
+                (lastOrder % 12) +
+                (lastOrder > 12 ? "pm" : "am"),
+            })
+        ),
+      })
+    )
+    .refine(
+      (data) => {
+        // Combine date and startTime to create a Date object for the reservation start time
+        const reservationStartTime = new Date(data.date);
+        reservationStartTime.setHours(data.startTime, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds
+
+        // Check if the reservation start time is in the future
+        return reservationStartTime.getTime() > new Date().getTime();
+      },
+      {
+        message: "Reservation must be in the future.",
+        path: ["date"],
+      }
+    );
+
   const form = useForm({
-    resolver: zodResolver(reservationFormSchema),
+    resolver: zodResolver(dynamicReservationFormSchema),
     mode: "onBlur",
     defaultValues: {
       name: "",
       phonenumber: "",
       service: "",
+      branchName: null,
       date: undefined,
       startTime: "09",
     },
@@ -68,6 +132,8 @@ export function ReservationForm({ services }: { services: TServices }) {
             return;
           }
 
+          setIsSubmitting(true);
+
           const submitData = {
             ...data,
             datetime: new Date(
@@ -77,6 +143,7 @@ export function ReservationForm({ services }: { services: TServices }) {
               parseInt(data.startTime),
               0
             ).toISOString(),
+            duration: selectedService?.duration,
           };
           const resp = await actions.reservations.addReservation(submitData);
 
@@ -85,6 +152,8 @@ export function ReservationForm({ services }: { services: TServices }) {
           } else {
             toast.error(resp.description, { id: toastId });
           }
+
+          setIsSubmitting(false);
         })}
       >
         <FormField
@@ -124,7 +193,15 @@ export function ReservationForm({ services }: { services: TServices }) {
           render={({ field }) => (
             <FormItem className="col-span-2">
               <FormLabel>Service</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={(value) => {
+                  const service = services.find((s) => s.name === value);
+                  setSelectedService(service || null);
+                  field.onChange(value);
+                }}
+                defaultValue={field.value}
+                value={selectedService?.name || ""}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a service" />
@@ -147,6 +224,42 @@ export function ReservationForm({ services }: { services: TServices }) {
         />
         <FormField
           control={form.control}
+          name="branchName"
+          render={({ field }) => (
+            <FormItem className="col-span-2">
+              <FormLabel>Branch Name</FormLabel>
+              <Select
+                onValueChange={(value) => {
+                  const branch = branchesOptions.find((b) => b.name === value);
+                  setSelectedBranch(branch || null);
+                  field.onChange(value);
+                }}
+                defaultValue={field.value || ""}
+                disabled={selectedService === null}
+                value={selectedBranch?.name || ""}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a service" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {branchesOptions.map((branch) => (
+                    <SelectItem key={branch.name} value={branch.name}>
+                      {branch.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormDescription>
+                Select the branch you want to do the service at.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="date"
           render={({ field }) => (
             <FormItem className="col-span-2">
@@ -160,6 +273,7 @@ export function ReservationForm({ services }: { services: TServices }) {
                         "w-full pl-3 text-left font-normal",
                         !field.value && "text-muted-foreground"
                       )}
+                      disabled={selectedService === null}
                     >
                       {field.value ? (
                         format(field.value, "PPP")
@@ -201,6 +315,7 @@ export function ReservationForm({ services }: { services: TServices }) {
                     {...field}
                     className="w-[40%]"
                     onKeyDown={handleNonDigitKeyDown}
+                    disabled={selectedService === null}
                   />
                   <p className="opacity-50">:</p>
                   <Input
@@ -212,7 +327,8 @@ export function ReservationForm({ services }: { services: TServices }) {
                 </div>
               </FormControl>
               <FormDescription>
-                A service is estimated to be one hour long.
+                Last order time is calculated based on the closing time minus
+                the service duration.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -220,7 +336,12 @@ export function ReservationForm({ services }: { services: TServices }) {
         />
 
         <div className="col-span-2 flex justify-end">
-          <Button type="submit">Submit</Button>
+          <Button
+            type="submit"
+            disabled={selectedService === null || isSubmitting}
+          >
+            Submit
+          </Button>
         </div>
       </form>
     </Form>

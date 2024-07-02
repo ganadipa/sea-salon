@@ -27,53 +27,52 @@ export const reviewFormSchema = z.object({
     }),
 });
 
-export const reservationFormSchema = z
-  .object({
-    name: z
-      .string()
-      .min(2, {
-        message: "Name must be at least 2 characters.",
-      })
-      .max(20, {
-        message: "Name must be at most 20 characters.",
-      }),
-    phonenumber: z
-      .string()
-      .min(8, {
-        message: "Phone number must be at least 8 digits.",
-      })
-      .max(15, {
-        message: "Phone number must be at most 15 digits.",
-      }),
-    service: z.string(),
-    date: z.date(),
-    startTime: z.preprocess(
-      (val: unknown) => (val === "" ? 0 : parseInt(val as string, 10)),
-      z
-        .number()
-        .int()
-        .min(9, {
-          message: "Our salon opens at 9am",
-        })
-        .max(20, {
-          message: "Our salon last appointment is at 8pm",
-        })
-    ),
-  })
-  .refine(
-    (data) => {
-      // Combine date and startTime to create a Date object for the reservation start time
-      const reservationStartTime = new Date(data.date);
-      reservationStartTime.setHours(data.startTime, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds
+export const reservationFormSchema = z.object({
+  name: z
+    .string()
+    .min(2, {
+      message: "Name must be at least 2 characters.",
+    })
+    .max(20, {
+      message: "Name must be at most 20 characters.",
+    }),
+  phonenumber: z
+    .string()
+    .min(8, {
+      message: "Phone number must be at least 8 digits.",
+    })
+    .max(15, {
+      message: "Phone number must be at most 15 digits.",
+    }),
+  service: z.string(),
+  date: z.date(),
+  // startTime: z.preprocess(
+  //   (val: unknown) => (val === "" ? 0 : parseInt(val as string, 10)),
+  //   z
+  //     .number()
+  //     .int()
+  //     .min(9, {
+  //       message: "Our salon opens at 9am",
+  //     })
+  //     .max(20, {
+  //       message: "Our salon last appointment is at 8pm",
+  //     })
+  // ),
+});
+// .refine(
+//   (data) => {
+//     // Combine date and startTime to create a Date object for the reservation start time
+//     const reservationStartTime = new Date(data.date);
+//     reservationStartTime.setHours(data.startTime, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds
 
-      // Check if the reservation start time is in the future
-      return reservationStartTime.getTime() > new Date().getTime();
-    },
-    {
-      message: "Reservation must be in the future.",
-      path: ["date"],
-    }
-  );
+//     // Check if the reservation start time is in the future
+//     return reservationStartTime.getTime() > new Date().getTime();
+//   },
+//   {
+//     message: "Reservation must be in the future.",
+//     path: ["date"],
+//   }
+// );
 
 export const registerFormSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),

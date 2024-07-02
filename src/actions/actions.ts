@@ -2,7 +2,12 @@ import { signOutAction, signInAction, register } from "./authentication";
 import { addReservation, getAllReservations } from "./reservations";
 import { addReview, getReviews } from "./reviews";
 import { addService, getServices } from "./services";
-import { addBranch, getBranches, getServicesBranches } from "./branch";
+import {
+  addBranch,
+  getBranches,
+  getServicesBranches,
+  getAllBranches,
+} from "./branch";
 
 export type TMutationResponse = {
   ok: boolean;
@@ -29,5 +34,6 @@ export const actions = {
     addBranch,
     getBranches,
     getServicesBranches,
+    getAllBranches,
   },
 };
