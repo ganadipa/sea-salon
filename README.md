@@ -18,7 +18,19 @@ To access the app, you can go to one of the links:
 
 - [sea-salon-application.vercel.app](https://sea-salon-application.vercel.app/)
 
-Note that cloning the repository and running by doing `pnpm run dev` will not work because I don't share `.env` file.
+- Or you can clone the repository, make .env file at the root containing:
+
+```bash
+DATABASE_URL = "postgresql://MinichSalon_owner:BgEPM94tfjvp@ep-bold-term-a1okqswl.ap-southeast-1.aws.neon.tech/MinichSalon?sslmode=require"
+AUTH_SECRET="Ro5S+k6+BPdRm/J1TA3WJwDL1JYX5m/Ml2d4lJy3NWM="
+```
+
+then do
+
+```bash
+pnpm i
+pnpm run dev
+```
 
 # 🛠️ Frameworks/Tools Used
 
