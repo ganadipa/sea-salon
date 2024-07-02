@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { actions } from "@/actions/actions";
 
 import { useRouter } from "next/navigation";
+import { use, useEffect, useState } from "react";
 
 export function SignOut({ className }: { className?: string }) {
   const router = useRouter();
@@ -11,7 +12,10 @@ export function SignOut({ className }: { className?: string }) {
   return (
     <form
       action={async () => {
+        const toastId = toast.loading("Signing out...");
         await actions.auth.signOutAction();
+        toast.success("Signed out", { id: toastId });
+
         router.replace("/app");
         router.refresh();
       }}
