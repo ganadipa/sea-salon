@@ -10,5 +10,5 @@ export default async function AppLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
-  return <main className="bg-white h-screen overflow-y-auto">{children}</main>;
+  return <main className="bg-white">{children}</main>;
 }

@@ -22,9 +22,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body
-        className={`${inter.className} bg-white overflow-x-hidden h-screen overflow-y-hidden`}
-      >
+      <body className={`${inter.className} bg-white overflow-x-hidden`}>
         <SessionProvider session={session}>
           <div className="max-w-[2000px] mx-auto">
             <HeaderWrapper />

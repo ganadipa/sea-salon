@@ -91,7 +91,7 @@ function Service({
       </div>
       is available at:
       {
-        <div className="grid grid-cols-2 gap-4 px-4 lg:px-8 h-[400px] py-4 overflow-x-hidden overflow-y-scroll w-3/5">
+        <div className="grid grid-cols-2 gap-4 px-4 lg:px-8 h-[400px] py-4 overflow-x-hidden overflow-y-scroll w-full lg:w-3/5">
           {relation
             .filter((r) => r.service === service.name)
             .map((r) => {
@@ -99,7 +99,7 @@ function Service({
               return (
                 <div
                   key={r.branch}
-                  className="h-[250px] flex flex-col gap-2 text-black bg-white lg:p-8 p-4 rounded-lg shadow-md justify-between"
+                  className="h-[330px] flex flex-col gap-2 text-black bg-white lg:p-8 p-4 rounded-lg shadow-md justify-between"
                 >
                   <span className="font-semibold">{branch?.name}</span>
                   <span>{branch?.location}</span>
