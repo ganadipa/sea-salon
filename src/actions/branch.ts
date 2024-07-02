@@ -10,6 +10,7 @@ import { db } from "@/drizzle";
 import { z } from "zod";
 import { NeonDbError } from "@neondatabase/serverless";
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 const ZAddBranch = z.object({
   branchName: z.string(),
@@ -23,7 +24,7 @@ export async function addBranch(service: unknown): Promise<TMutationResponse> {
   if (!validatedService.success) {
     return {
       ok: false,
-      description: "Invalid service data",
+      description: "Invalid new branch data",
     };
   }
 
@@ -42,33 +43,39 @@ export async function addBranch(service: unknown): Promise<TMutationResponse> {
 
     ret = {
       ok: true,
-      description: "Successfully added the service",
+      description: "Successfully added the new branch",
     };
   } catch (error) {
     if (error instanceof NeonDbError) {
       if (error.code === "23505") {
         ret = {
           ok: false,
-          description: "Service already exists",
+          description: "branch already exists",
         };
       } else {
         ret = {
           ok: false,
-          description: "Error adding service",
+          description: "Error adding branch",
         };
       }
     } else {
       ret = {
         ok: false,
-        description: "Error adding service",
+        description: "Error adding branch",
       };
     }
   }
+
+  revalidatePath("/app", "layout");
+  revalidatePath("/app/dashboard");
 
   return ret;
 }
 
 export async function getBranches(serviceName?: string) {
+  revalidatePath("/app", "layout");
+  revalidatePath("/app/dashboard");
+
   return await db
     .selectDistinct({
       name: branchesTable.name,
@@ -86,6 +93,16 @@ export async function getBranches(serviceName?: string) {
     );
 }
 
+export async function getAllBranches() {
+  revalidatePath("/app", "layout");
+  revalidatePath("/app/dashboard");
+
+  return await db.selectDistinct().from(branchesTable);
+}
+
 export async function getServicesBranches() {
+  revalidatePath("/app", "layout");
+  revalidatePath("/app/dashboard");
+
   return await db.select().from(servicesBranchesTable);
 }

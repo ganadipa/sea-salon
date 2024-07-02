@@ -21,7 +21,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-white overflow-x-hidden`}>
+      <body className={`${inter.className} bg-white overflow-x-hidden `}>
         <SessionProvider session={session}>{children}</SessionProvider>
         <Toaster />
       </body>

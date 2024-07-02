@@ -56,11 +56,11 @@ async function CustomerPage({
 function AdminPage({ schedules }: { schedules: ReservationsDatabaseColumn[] }) {
   return (
     <main className="pt-16 min-h-screen bg-cyan-950 flex flex-col items-center gap-8">
-      <section className="flex flex-row max-lg:flex-row gap-8 items-center justify-around bg-zinc-200/70 py-8 px-12">
+      <section className="flex flex-row max-lg:flex-row gap-8 items-center justify-around bg-zinc-200/70 py-4 lg:py-8 lg:px-12 ">
         <AdminTabs />
       </section>
 
-      <section className="w-[80%] px-12 py-8 rounded-xl bg-white text-zinc-600 flex flex-col gap-8 items-center mt-12">
+      <section className="w-full lg:w-[80%] lg:px-12 py-8 lg:rounded-xl bg-white text-zinc-600 flex flex-col gap-8 items-center lg:mt-12 mt-4 px-2 mb-4">
         <h1 className="font-bold text-4xl text-cyan-950/50 ">
           {" "}
           Your Future Schedule{" "}

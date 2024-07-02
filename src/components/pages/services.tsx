@@ -32,7 +32,7 @@ export default function Services({ services }: { services: TServices }) {
       </div>
 
       {/* Button to show different services */}
-      <div className=" max-w-4/5 lg:w-[800px]  bg-accent-yellow/20 px-12 py-4">
+      <div className="w-4/5 lg:w-[800px]  bg-accent-yellow/20 px-12 py-4">
         <div className="overflow-x-scroll flex gap-4 items-center h-24">
           {services.map((service) => (
             <ServiceButton
@@ -76,7 +76,7 @@ function Service({
       </div>
       is available at:
       {
-        <div className="flex flex-wrap gap-4">
+        <div className="grid grid-cols-2 gap-4 px-4 h-[400px] py-4 overflow-x-hidden overflow-y-scroll">
           {relation
             .filter((r) => r.service === service.name)
             .map((r) => {
@@ -84,7 +84,7 @@ function Service({
               return (
                 <div
                   key={r.branch}
-                  className="flex flex-col gap-2 bg-white p-4 rounded-lg shadow-md"
+                  className="h-[250px] flex flex-col gap-2 bg-white p-4 rounded-lg shadow-md justify-between"
                 >
                   <span className="font-semibold">{branch?.name}</span>
                   <span>{branch?.location}</span>

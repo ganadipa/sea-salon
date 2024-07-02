@@ -46,7 +46,7 @@ export function NewBranch() {
   return (
     <Form {...form}>
       <form
-        className="grid grid-cols-2 gap-4 p-8 bg-white border border-gray-200 rounded-lg w-[500px]"
+        className="grid grid-cols-2 gap-4 p-8 bg-white border border-gray-200 rounded-lg lg:w-[500px] w-full h-full"
         onSubmit={form.handleSubmit(async (data) => {
           const toastId = toast.loading("Adding new branch...");
 

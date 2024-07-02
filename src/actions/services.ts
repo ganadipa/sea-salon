@@ -7,6 +7,7 @@ import { db } from "@/drizzle";
 import { NeonDbError } from "@neondatabase/serverless";
 import { z } from "zod";
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 const ZAddService = z.object({
   serviceName: z.string(),
@@ -81,9 +82,13 @@ export async function addService(service: unknown): Promise<TMutationResponse> {
     }
   }
 
+  revalidatePath("/app", "layout");
+
   return ret;
 }
 
 export async function getServices() {
+  revalidatePath("/app", "layout");
+
   return await db.select().from(servicesTable);
 }
