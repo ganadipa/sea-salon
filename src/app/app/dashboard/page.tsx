@@ -7,9 +7,15 @@ import { ReservationForm } from "@/components/reservation-form";
 import ReservationsTable from "@/components/reservation-table";
 import { ReservationsDatabaseColumn } from "@/lib/types";
 import { sleep } from "@/lib/utils";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "SEA Salon - Your best salon in town.",
+  description: "Best salon in town.",
+};
 
 export default async function Page() {
   const session = await auth();
