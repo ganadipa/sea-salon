@@ -11,7 +11,7 @@ export default async function AppLayout({
 }) {
   const session = await auth();
   return (
-    <main className="bg-white overflow-y-auto">
+    <main className="bg-white h-screen overflow-y-auto">
       <HeaderWrapper />
       {children}
     </main>
