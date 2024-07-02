@@ -31,7 +31,6 @@ import { format } from "date-fns";
 import { Calendar } from "./ui/calendar";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { KeyboardEvent, useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
 import { z } from "zod";
 import { TBranch, TService, TServices } from "@/lib/types";
 
@@ -117,8 +116,6 @@ export function ReservationForm({ services }: { services: TServices }) {
       e.preventDefault();
     }
   };
-
-  const session = useSession();
 
   return (
     <Form {...form}>

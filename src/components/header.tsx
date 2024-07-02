@@ -6,7 +6,6 @@ import React from "react";
 import Logo from "./logo";
 import { cn } from "@/lib/utils";
 import { SignOut } from "./signout";
-import { useSession } from "next-auth/react";
 import { Session } from "next-auth";
 import useWindowSize from "@/hooks/useWindowSize";
 
