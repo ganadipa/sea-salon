@@ -39,7 +39,7 @@ export default function Services({ services }: { services: TServices }) {
               key={service.name}
               service={service}
               setShowingService={setShowingService}
-              active={showingService === service}
+              active={showingService.name === service.name}
             />
           ))}
         </div>

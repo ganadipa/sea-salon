@@ -39,6 +39,7 @@ export function ReservationForm({ services }: { services: TServices }) {
   const [selectedService, setSelectedService] = useState<TService | null>(null);
   const [branchesOptions, setBranchesOptions] = useState<TBranch[]>([]);
   const [selectedBranch, setSelectedBranch] = useState<TBranch | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     async function fetchBranches() {
@@ -131,6 +132,8 @@ export function ReservationForm({ services }: { services: TServices }) {
             return;
           }
 
+          setIsSubmitting(true);
+
           const submitData = {
             ...data,
             datetime: new Date(
@@ -149,6 +152,8 @@ export function ReservationForm({ services }: { services: TServices }) {
           } else {
             toast.error(resp.description, { id: toastId });
           }
+
+          setIsSubmitting(false);
         })}
       >
         <FormField
@@ -331,7 +336,10 @@ export function ReservationForm({ services }: { services: TServices }) {
         />
 
         <div className="col-span-2 flex justify-end">
-          <Button type="submit" disabled={selectedService === null}>
+          <Button
+            type="submit"
+            disabled={selectedService === null || isSubmitting}
+          >
             Submit
           </Button>
         </div>
