@@ -10,7 +10,7 @@ import React from "react";
 export default async function Page() {
   const services = await actions.services.getServices();
   return (
-    <main>
+    <main className="">
       <Hero />
       <Services services={services} />
       <ContactUs />

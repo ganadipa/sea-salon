@@ -20,8 +20,6 @@ import { actions } from "@/actions/actions";
 import toast from "react-hot-toast";
 
 import { KeyboardEvent, useState } from "react";
-import { useSession } from "next-auth/react";
-import { Textarea } from "./ui/textarea";
 
 export function NewBranch() {
   const form = useForm({
@@ -40,8 +38,6 @@ export function NewBranch() {
       e.preventDefault();
     }
   };
-
-  const session = useSession();
 
   return (
     <Form {...form}>

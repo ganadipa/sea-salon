@@ -20,8 +20,6 @@ import { actions } from "@/actions/actions";
 import toast from "react-hot-toast";
 
 import { KeyboardEvent, use, useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import { Textarea } from "./ui/textarea";
 import {
   Select,
   SelectContent,
@@ -30,7 +28,6 @@ import {
   SelectValue,
 } from "./ui/select";
 import { TBranch } from "@/lib/types";
-import { cn } from "@/lib/utils";
 
 export function NewService() {
   const [branches, setBranches] = useState<TBranch[]>([]);
@@ -51,8 +48,6 @@ export function NewService() {
       e.preventDefault();
     }
   };
-
-  const session = useSession();
 
   useEffect(() => {
     const fetchBranches = async () => {
