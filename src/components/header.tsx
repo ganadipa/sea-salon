@@ -59,7 +59,11 @@ export default function Header({ session }: { session: Session | null }) {
               <Link
                 href={"/app/dashboard"}
                 className={cn(
-                  "text-white/70 rounded-sm px-2 py-1 hover:text-white focus:text-white transition font-semibold"
+                  "text-white/70 rounded-sm px-2 py-1 hover:text-white focus:text-white transition font-semibold",
+                  {
+                    "bg-black/10 text-white":
+                      "/authentication" === activePathname,
+                  }
                 )}
               >
                 Sign In

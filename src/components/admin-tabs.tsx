@@ -5,7 +5,7 @@ import { NewBranch } from "./new-branch-form";
 
 export default function AdminTabs() {
   return (
-    <Tabs defaultValue="new-service" className=" grid grid-cols-2">
+    <Tabs defaultValue="new-service" className="grid grid-cols-2">
       <TabsList className="col-span-2 row-span-1">
         <TabsTrigger value="new-service" className="w-full">
           Add New Service
@@ -16,13 +16,13 @@ export default function AdminTabs() {
       </TabsList>
       <TabsContent
         value="new-service"
-        className="min-h-[360px] border px-4 py-2 rounded  col-span-2"
+        className="min-h-[450px]  rounded  col-span-2"
       >
         <NewService />
       </TabsContent>
       <TabsContent
         value="new-branch"
-        className="min-h-[360px] col-span-2 border px-4 py-2 rounded"
+        className="min-h-[450px] col-span-2 rounded"
       >
         <NewBranch />
       </TabsContent>

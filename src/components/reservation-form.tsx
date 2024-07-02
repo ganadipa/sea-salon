@@ -39,6 +39,7 @@ export function ReservationForm({ services }: { services: TServices }) {
   const [selectedService, setSelectedService] = useState<TService | null>(null);
   const [branchesOptions, setBranchesOptions] = useState<TBranch[]>([]);
   const [selectedBranch, setSelectedBranch] = useState<TBranch | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     async function fetchBranches() {
@@ -60,28 +61,43 @@ export function ReservationForm({ services }: { services: TServices }) {
   const openTime = selectedBranch?.startTime || 9;
   const lastOrder =
     (selectedBranch?.endTime || 21) - (selectedService?.duration || 1);
-  const dynamicReservationFormSchema = reservationFormSchema.merge(
-    z.object({
-      startTime: z.preprocess(
-        (val: unknown) => (val === "" ? 0 : parseInt(val as string, 10)),
-        z
-          .number()
-          .int()
-          .min(openTime, {
-            message:
-              "Our salon opens at " +
-              (openTime > 12 ? openTime - 12 : openTime) +
-              (openTime > 12 ? "pm" : "am"),
-          })
-          .max(lastOrder, {
-            message:
-              "The last order for this service is at " +
-              (lastOrder % 12) +
-              (lastOrder > 12 ? "pm" : "am"),
-          })
-      ),
-    })
-  );
+  const dynamicReservationFormSchema = reservationFormSchema
+    .merge(
+      z.object({
+        startTime: z.preprocess(
+          (val: unknown) => (val === "" ? 0 : parseInt(val as string, 10)),
+          z
+            .number()
+            .int()
+            .min(openTime, {
+              message:
+                "Our salon opens at " +
+                (openTime > 12 ? openTime - 12 : openTime) +
+                (openTime > 12 ? "pm" : "am"),
+            })
+            .max(lastOrder, {
+              message:
+                "The last order for this service is at " +
+                (lastOrder % 12) +
+                (lastOrder > 12 ? "pm" : "am"),
+            })
+        ),
+      })
+    )
+    .refine(
+      (data) => {
+        // Combine date and startTime to create a Date object for the reservation start time
+        const reservationStartTime = new Date(data.date);
+        reservationStartTime.setHours(data.startTime, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds
+
+        // Check if the reservation start time is in the future
+        return reservationStartTime.getTime() > new Date().getTime();
+      },
+      {
+        message: "Reservation must be in the future.",
+        path: ["date"],
+      }
+    );
 
   const form = useForm({
     resolver: zodResolver(dynamicReservationFormSchema),
@@ -116,6 +132,8 @@ export function ReservationForm({ services }: { services: TServices }) {
             return;
           }
 
+          setIsSubmitting(true);
+
           const submitData = {
             ...data,
             datetime: new Date(
@@ -134,6 +152,8 @@ export function ReservationForm({ services }: { services: TServices }) {
           } else {
             toast.error(resp.description, { id: toastId });
           }
+
+          setIsSubmitting(false);
         })}
       >
         <FormField
@@ -316,7 +336,10 @@ export function ReservationForm({ services }: { services: TServices }) {
         />
 
         <div className="col-span-2 flex justify-end">
-          <Button type="submit" disabled={selectedService === null}>
+          <Button
+            type="submit"
+            disabled={selectedService === null || isSubmitting}
+          >
             Submit
           </Button>
         </div>

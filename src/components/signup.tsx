@@ -19,7 +19,13 @@ import { KeyboardEvent } from "react";
 import { actions } from "@/actions/actions";
 import toast from "react-hot-toast";
 
-export function SignUp() {
+export function SignUp({
+  isSubmitting,
+  setIsSubmitting,
+}: {
+  isSubmitting: boolean;
+  setIsSubmitting: (value: boolean) => void;
+}) {
   const form = useForm({
     resolver: zodResolver(registerFormSchema),
     mode: "onBlur",
@@ -43,6 +49,7 @@ export function SignUp() {
         className="grid grid-cols-2 gap-4"
         onSubmit={form.handleSubmit(async (data) => {
           const toastId = toast.loading("Signing up...");
+          setIsSubmitting(true);
           const resp = await actions.auth.register(data);
 
           if (resp.ok) {
@@ -54,6 +61,7 @@ export function SignUp() {
           let formdata = new FormData();
           formdata.append("email", data.email);
           formdata.append("password", data.password);
+          setIsSubmitting(false);
           await actions.auth.signInAction(formdata);
         })}
       >
@@ -119,7 +127,9 @@ export function SignUp() {
           )}
         />
         <div className="col-span-2 flex justify-end">
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={isSubmitting}>
+            Submit
+          </Button>
         </div>
       </form>
     </Form>

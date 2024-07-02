@@ -19,12 +19,14 @@ import { Textarea } from "./ui/textarea";
 import { reviewFormSchema } from "@/lib/schemas";
 import { actions } from "@/actions/actions";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
 export function ReviewForm({
   onFormSubmission,
 }: {
   onFormSubmission: () => void;
 }) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm({
     resolver: zodResolver(reviewFormSchema),
     mode: "onBlur",
@@ -42,6 +44,8 @@ export function ReviewForm({
         action={async () => {
           const result = await form.trigger();
           if (!result) return;
+
+          setIsSubmitting(true);
           const toastId = toast.loading("Submitting review...");
 
           const reviewData = form.getValues();
@@ -54,6 +58,7 @@ export function ReviewForm({
             toast.error(resp.description, { id: toastId });
           }
 
+          setIsSubmitting(false);
           onFormSubmission();
         }}
       >
@@ -103,7 +108,9 @@ export function ReviewForm({
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          Submit
+        </Button>
       </form>
     </Form>
   );
