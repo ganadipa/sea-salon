@@ -6,7 +6,9 @@ import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
 
 export default function Services({ services }: { services: TServices }) {
-  const [showingService, setShowingService] = useState<TService>(services[0]);
+  const [showingService, setShowingService] = useState<TService | null>(
+    services[0] ?? null
+  );
   const [servicesBranches, setServicesBranches] = useState<
     {
       service: string | null;
@@ -24,8 +26,17 @@ export default function Services({ services }: { services: TServices }) {
     fetchBranches();
   }, []);
 
+  if (!services.length) {
+    return (
+      <section className="text-5xl mx-auto flex items-center justify-center my-16">
+        {" "}
+        Currently, Our salon has no service.
+      </section>
+    );
+  }
+
   return (
-    <section className="min-h-screen flex flex-col items-center pb-24">
+    <section className="min-h-screen flex flex-col items-center pb-24 text-zinc-200 bg-extra-middle">
       {/* title */}
       <div className="my-12">
         <span className="text-5xl font-bold">At our salon.</span>
@@ -33,13 +44,13 @@ export default function Services({ services }: { services: TServices }) {
 
       {/* Button to show different services */}
       <div className="w-4/5 lg:w-[800px]  bg-accent-yellow/20 px-12 py-4">
-        <div className="overflow-x-scroll flex gap-4 items-center h-24">
+        <div className="overflow-x-scroll flex gap-4 items-center h-24 text-black">
           {services.map((service) => (
             <ServiceButton
               key={service.name}
               service={service}
               setShowingService={setShowingService}
-              active={showingService.name === service.name}
+              active={showingService?.name === service.name}
             />
           ))}
         </div>
@@ -60,13 +71,17 @@ function Service({
   relation,
   branches,
 }: {
-  service: TService;
+  service: TService | null;
   relation: {
     service: string | null;
     branch: string | null;
   }[];
   branches: TBranch[];
 }) {
+  if (!service) {
+    return <></>;
+  }
+
   return (
     <div className="flex flex-col w-full items-center gap-8 mt-8">
       <div>
@@ -76,7 +91,7 @@ function Service({
       </div>
       is available at:
       {
-        <div className="grid grid-cols-2 gap-4 px-4 h-[400px] py-4 overflow-x-hidden overflow-y-scroll">
+        <div className="grid grid-cols-2 gap-4 px-4 lg:px-8 h-[400px] py-4 overflow-x-hidden overflow-y-scroll w-3/5">
           {relation
             .filter((r) => r.service === service.name)
             .map((r) => {
@@ -84,7 +99,7 @@ function Service({
               return (
                 <div
                   key={r.branch}
-                  className="h-[250px] flex flex-col gap-2 bg-white p-4 rounded-lg shadow-md justify-between"
+                  className="h-[250px] flex flex-col gap-2 text-black bg-white lg:p-8 p-4 rounded-lg shadow-md justify-between"
                 >
                   <span className="font-semibold">{branch?.name}</span>
                   <span>{branch?.location}</span>
@@ -106,7 +121,7 @@ function ServiceButton({
   active,
 }: {
   service: TService;
-  setShowingService: React.Dispatch<React.SetStateAction<TService>>;
+  setShowingService: React.Dispatch<React.SetStateAction<TService | null>>;
   active: boolean;
 }) {
   return (

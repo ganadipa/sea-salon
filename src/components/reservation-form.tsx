@@ -117,6 +117,16 @@ export function ReservationForm({ services }: { services: TServices }) {
     }
   };
 
+  if (services.length === 0) {
+    return (
+      <div className="bg-red-400 px-4 py-2 rounded">
+        <p className="text-4xl font-semibold text-white">
+          We have no service yet :&#40;
+        </p>
+      </div>
+    );
+  }
+
   return (
     <Form {...form}>
       <form

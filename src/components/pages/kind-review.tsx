@@ -10,6 +10,21 @@ export default async function KindReview() {
     averageRating =
       reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
   }
+
+  if (reviews?.length === 0) {
+    return (
+      <section className="bg-cyan-950 min-h-[300px] py-8 px-8 md:py-16 md:px-32 flex flex-col items-center ">
+        <h1 className="text-slate-100 text-center font-bold text-4xl mb-8">
+          Our Reviews
+        </h1>
+        <AddReviewButton />
+        <p className="text-white text-center">
+          No reviews yet. Be the first to review!
+        </p>
+      </section>
+    );
+  }
+
   return (
     <section className="bg-cyan-950 min-h-[300px] py-8 px-8 md:py-16 md:px-32 flex flex-col items-center ">
       <h1 className="text-slate-100 text-center font-bold text-4xl mb-8">

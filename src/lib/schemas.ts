@@ -152,8 +152,8 @@ export const newBranchFormSchema = z
       .min(10, {
         message: "Address must be at least 10 characters.",
       })
-      .max(80, {
-        message: "Address must be at most 80 characters.",
+      .max(120, {
+        message: "Address must be at most 120 characters.",
       }),
     startTime: z.preprocess(
       (val: unknown) => (val === "" ? 0 : parseInt(val as string, 10)),
