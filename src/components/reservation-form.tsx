@@ -33,6 +33,7 @@ import { CalendarIcon } from "@radix-ui/react-icons";
 import { KeyboardEvent, useEffect, useState } from "react";
 import { z } from "zod";
 import { TBranch, TService, TServices } from "@/lib/types";
+import { useSession } from "next-auth/react";
 
 export function ReservationForm({ services }: { services: TServices }) {
   const [selectedService, setSelectedService] = useState<TService | null>(null);

@@ -20,6 +20,7 @@ import { actions } from "@/actions/actions";
 import toast from "react-hot-toast";
 import { sleep } from "@/lib/utils";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export function SignIn({
   isSubmitting,

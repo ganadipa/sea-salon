@@ -5,6 +5,7 @@ import { actions } from "@/actions/actions";
 
 import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
+import { revalidatePath } from "next/cache";
 
 export function SignOut({ className }: { className?: string }) {
   const router = useRouter();
