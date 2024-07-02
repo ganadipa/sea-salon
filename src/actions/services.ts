@@ -6,6 +6,7 @@ import { servicesBranchesTable, servicesTable } from "@/drizzle/schema";
 import { db } from "@/drizzle";
 import { NeonDbError } from "@neondatabase/serverless";
 import { z } from "zod";
+import { eq } from "drizzle-orm";
 
 const ZAddService = z.object({
   serviceName: z.string(),
@@ -28,10 +29,27 @@ export async function addService(service: unknown): Promise<TMutationResponse> {
   };
 
   try {
-    await db.insert(servicesTable).values({
-      name: validatedService.data.serviceName,
-      duration: validatedService.data.duration,
-    });
+    const serviceExists = await db
+      .select()
+      .from(servicesTable)
+      .where(eq(servicesTable.name, validatedService.data.serviceName));
+
+    if (serviceExists.length == 0) {
+      await db.insert(servicesTable).values({
+        name: validatedService.data.serviceName,
+        duration: validatedService.data.duration,
+      });
+    } else {
+      if (serviceExists[0].duration !== validatedService.data.duration) {
+        return {
+          ok: false,
+          description:
+            "This kind of service must be " +
+            serviceExists[0].duration +
+            " hour(s) long.",
+        };
+      }
+    }
 
     await db.insert(servicesBranchesTable).values({
       service: validatedService.data.serviceName,

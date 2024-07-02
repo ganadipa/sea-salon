@@ -1,16 +1,25 @@
 "use server";
 
 import { TMutationResponse } from "./actions";
-import { newServiceFormSchema } from "@/lib/schemas";
 import {
   branchesTable,
   servicesBranchesTable,
   servicesTable,
 } from "@/drizzle/schema";
 import { db } from "@/drizzle";
+import { z } from "zod";
+import { NeonDbError } from "@neondatabase/serverless";
+import { eq } from "drizzle-orm";
+
+const ZAddBranch = z.object({
+  branchName: z.string(),
+  branchLocation: z.string(),
+  startTime: z.number(),
+  endTime: z.number(),
+});
 
 export async function addBranch(service: unknown): Promise<TMutationResponse> {
-  const validatedService = newServiceFormSchema.safeParse(service);
+  const validatedService = ZAddBranch.safeParse(service);
   if (!validatedService.success) {
     return {
       ok: false,
@@ -24,9 +33,11 @@ export async function addBranch(service: unknown): Promise<TMutationResponse> {
   };
 
   try {
-    await db.insert(servicesTable).values({
-      name: validatedService.data.serviceName,
-      duration: validatedService.data.duration,
+    await db.insert(branchesTable).values({
+      name: validatedService.data.branchName,
+      location: validatedService.data.branchLocation,
+      startTime: validatedService.data.startTime,
+      endTime: validatedService.data.endTime,
     });
 
     ret = {
@@ -34,17 +45,45 @@ export async function addBranch(service: unknown): Promise<TMutationResponse> {
       description: "Successfully added the service",
     };
   } catch (error) {
-    ret = {
-      ok: false,
-      description: "Error adding service",
-    };
+    if (error instanceof NeonDbError) {
+      if (error.code === "23505") {
+        ret = {
+          ok: false,
+          description: "Service already exists",
+        };
+      } else {
+        ret = {
+          ok: false,
+          description: "Error adding service",
+        };
+      }
+    } else {
+      ret = {
+        ok: false,
+        description: "Error adding service",
+      };
+    }
   }
 
   return ret;
 }
 
-export async function getBranches() {
-  return await db.select().from(branchesTable);
+export async function getBranches(serviceName?: string) {
+  return await db
+    .selectDistinct({
+      name: branchesTable.name,
+      location: branchesTable.location,
+      startTime: branchesTable.startTime,
+      endTime: branchesTable.endTime,
+    })
+    .from(branchesTable)
+    .innerJoin(
+      servicesBranchesTable,
+      eq(branchesTable.name, servicesBranchesTable.branch)
+    )
+    .where(
+      serviceName ? eq(servicesBranchesTable.service, serviceName) : undefined
+    );
 }
 
 export async function getServicesBranches() {

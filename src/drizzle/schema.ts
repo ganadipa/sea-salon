@@ -50,6 +50,7 @@ export const ReservationsTable = pgTable("reservations", {
     .notNull()
     .defaultNow(),
   email: text("email"),
+  duration: integer("duration"),
 });
 
 export const users = pgTable("user", {

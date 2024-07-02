@@ -57,7 +57,9 @@ export default function ReservationsTable({
                   {"   "}
                   {new Date(r.datetime).toLocaleTimeString()}
                 </TableCell>
-                <TableCell className="text-right">1 hour</TableCell>
+                <TableCell className="text-right">
+                  {r.duration || "-"}
+                </TableCell>
               </TableRow>
             );
 
@@ -75,7 +77,9 @@ export default function ReservationsTable({
                     {"   "}
                     {new Date(r.datetime).toLocaleTimeString()}
                   </TableCell>
-                  <TableCell className="text-right">1 hour</TableCell>
+                  <TableCell className="text-right">
+                    {r.duration || "-"}
+                  </TableCell>
                 </TableRow>
               );
             }
@@ -93,7 +97,9 @@ export default function ReservationsTable({
                     {"   "}
                     {new Date(r.datetime).toLocaleTimeString()}
                   </TableCell>
-                  <TableCell className="text-right">1 hour</TableCell>
+                  <TableCell className="text-right">
+                    {r.duration || "-"}
+                  </TableCell>
                 </TableRow>
               );
             }

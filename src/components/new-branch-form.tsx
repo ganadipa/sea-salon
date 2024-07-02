@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
-import { newServiceFormSchema } from "@/lib/schemas";
+import { newBranchFormSchema } from "@/lib/schemas";
 import { actions } from "@/actions/actions";
 import toast from "react-hot-toast";
 
@@ -25,13 +25,13 @@ import { Textarea } from "./ui/textarea";
 
 export function NewBranch() {
   const form = useForm({
-    resolver: zodResolver(newServiceFormSchema),
+    resolver: zodResolver(newBranchFormSchema),
     mode: "onBlur",
     defaultValues: {
-      serviceName: "",
-      duration: "",
-      description: "",
-      imageUrl: "",
+      branchName: "",
+      branchLocation: "",
+      startTime: "",
+      endTime: "",
     },
   });
 
@@ -48,9 +48,9 @@ export function NewBranch() {
       <form
         className="grid grid-cols-2 gap-4 p-8 bg-white border border-gray-200 rounded-lg w-[500px]"
         onSubmit={form.handleSubmit(async (data) => {
-          const toastId = toast.loading("Adding new service...");
+          const toastId = toast.loading("Adding new branch...");
 
-          const resp = await actions.services.addService(data);
+          const resp = await actions.branch.addBranch(data);
 
           if (resp.ok) {
             toast.success(resp.description, { id: toastId });
@@ -61,12 +61,12 @@ export function NewBranch() {
       >
         <FormField
           control={form.control}
-          name="serviceName"
+          name="branchName"
           render={({ field }) => (
-            <FormItem className="col-span-1">
-              <FormLabel>Service Name</FormLabel>
+            <FormItem className="col-span-2">
+              <FormLabel>Branch Name</FormLabel>
               <FormControl>
-                <Input placeholder="Haircuts and Styling" {...field} />
+                <Input placeholder="Fancy Pants Rich Mcgee" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -74,16 +74,14 @@ export function NewBranch() {
         />
         <FormField
           control={form.control}
-          name="duration"
+          name="branchLocation"
           render={({ field }) => (
-            <FormItem className="col-span-1">
-              <FormLabel>Service Duration (hr)</FormLabel>
+            <FormItem className="col-span-2">
+              <FormLabel>Where is this new branch?</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="1"
-                  type="number"
+                  placeholder="789 Uptown St, New York, NY 10003"
                   {...field}
-                  onKeyDown={handleNonDigitKeyDown}
                 />
               </FormControl>
               <FormMessage />
@@ -93,12 +91,27 @@ export function NewBranch() {
 
         <FormField
           control={form.control}
-          name="imageUrl"
+          name="startTime"
           render={({ field }) => (
-            <FormItem className="col-span-2">
-              <FormLabel>Image URL</FormLabel>
+            <FormItem className="col-span-1">
+              <FormLabel>Openting Time</FormLabel>
               <FormControl>
-                <Input placeholder="" {...field} />
+                <div className="flex items-center gap-2">
+                  <Input
+                    placeholder="09"
+                    type="number"
+                    {...field}
+                    className="w-[45%]"
+                    onKeyDown={handleNonDigitKeyDown}
+                  />
+                  <p className="opacity-50">:</p>
+                  <Input
+                    placeholder="00"
+                    disabled
+                    type="number"
+                    className="w-[45%]"
+                  />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -107,19 +120,28 @@ export function NewBranch() {
 
         <FormField
           control={form.control}
-          name="description"
+          name="endTime"
           render={({ field }) => (
-            <FormItem className="col-span-2">
-              <FormLabel>Description</FormLabel>
+            <FormItem className="col-span-1">
+              <FormLabel>Closing Time</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="The pedicure service was excellent, and my feet feel incredibly soft."
-                  {...field}
-                  spellCheck={false}
-                  className="h-[50px]"
-                />
+                <div className="flex items-center gap-2">
+                  <Input
+                    placeholder="21"
+                    type="number"
+                    {...field}
+                    className="w-[45%]"
+                    onKeyDown={handleNonDigitKeyDown}
+                  />
+                  <p className="opacity-50">:</p>
+                  <Input
+                    placeholder="00"
+                    disabled
+                    type="number"
+                    className="w-[45%]"
+                  />
+                </div>
               </FormControl>
-              <FormDescription>Service&apos;s Description.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
