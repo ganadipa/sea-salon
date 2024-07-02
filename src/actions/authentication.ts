@@ -58,7 +58,6 @@ export const register = async (
 export const signOutAction = async () => {
   await signOut();
   revalidatePath("/app", "layout");
-  revalidatePath("/");
 };
 
 export const signInAction: (

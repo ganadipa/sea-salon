@@ -33,6 +33,7 @@ import { CalendarIcon } from "@radix-ui/react-icons";
 import { KeyboardEvent, useEffect, useState } from "react";
 import { z } from "zod";
 import { TBranch, TService, TServices } from "@/lib/types";
+import { useSession } from "next-auth/react";
 
 export function ReservationForm({ services }: { services: TServices }) {
   const [selectedService, setSelectedService] = useState<TService | null>(null);
@@ -116,6 +117,16 @@ export function ReservationForm({ services }: { services: TServices }) {
       e.preventDefault();
     }
   };
+
+  if (services.length === 0) {
+    return (
+      <div className="bg-red-400 px-4 py-2 rounded">
+        <p className="text-4xl font-semibold text-white">
+          We have no service yet :&#40;
+        </p>
+      </div>
+    );
+  }
 
   return (
     <Form {...form}>

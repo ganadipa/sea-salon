@@ -24,11 +24,11 @@ const seed = async () => {
   //   }))
   // );
   // await seedReviews();
-  // await seedUsers();
+  await seedUsers();
   // await seedServices();
 
-  await seedBranches();
-  await seedBranchServiceRelation();
+  // await seedBranches();
+  // await seedBranchServiceRelation();
 };
 
 const seedReviews = async () => {
