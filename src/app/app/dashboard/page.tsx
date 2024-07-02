@@ -36,7 +36,7 @@ async function CustomerPage({
   const services = await actions.services.getServices();
 
   return (
-    <main className="pt-16 min-h-screen lg:bg-cyan-950 flex flex-col items-center gap-8 px-2">
+    <main className="py-24 min-h-screen lg:bg-cyan-950 flex flex-col items-center gap-8 px-2">
       <section className="lg:w-[80%] w-full lg:px-12 max-lg:mx-2 py-8 rounded-xl bg-white text-zinc-600 flex flex-col gap-8 border items-center">
         <h1 className="font-bold text-xl lg:text-4xl lg:text-cyan-950/50 text-zinc-800 ">
           {" "}
@@ -56,7 +56,7 @@ async function CustomerPage({
 
 function AdminPage({ schedules }: { schedules: ReservationsDatabaseColumn[] }) {
   return (
-    <main className="pt-16 min-h-screen bg-cyan-950 flex flex-col items-center gap-8">
+    <main className="py-24 min-h-screen bg-cyan-950 flex flex-col items-center gap-8">
       <section className="flex flex-row max-lg:flex-row gap-8 items-center justify-around bg-zinc-200/70 py-4 lg:py-8 lg:px-12 ">
         <AdminTabs />
       </section>
