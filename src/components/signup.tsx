@@ -53,7 +53,7 @@ export function SignUp({
           const resp = await actions.auth.register(data);
 
           if (resp.ok) {
-            toast.success("Signed up successfully", { id: toastId });
+            toast.success(resp.description, { id: toastId });
           } else {
             toast.error(resp.description || "Invalid input", { id: toastId });
           }
